@@ -1,5 +1,19 @@
 import React, { Component } from "react"
 import ReactCSSTransitionGroup from "react-addons-css-transition-group"
+import { withStyles } from "@material-ui/core/styles"
+import Button from "@material-ui/core/Button"
+
+const styles = theme => ({
+  phraseItem: {
+    ...theme.typography.display4,
+    // fontSize: "2em",
+    color: theme.palette.primary.main,
+  },
+  button: {
+    marginTop: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
+})
 
 const goRhymes = [
   "Bio",
@@ -62,37 +76,69 @@ const teamRhymes = [
   "Theme",
 ]
 
-export default class GoTeam extends Component {
-  constructor() {
-    super()
-    this.state = { show: false }
+class GoTeam extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { phrases: [] }
+    this.handleAdd = this.handleAdd.bind(this)
   }
 
-  render() {
+  generatePhrase = () => {
     const goRnd = Math.floor(Math.random() * (goRhymes.length - 1))
     const teamRnd = Math.floor(Math.random() * (teamRhymes.length - 1))
     const phrase =
       (goRnd === -1 && "") || `${goRhymes[goRnd]} ${teamRhymes[teamRnd]}`
-    if (!this.state.show)
-      return <button onClick={() => this.setState({ show: true })}>GO!</button>
+    return phrase
+  }
+
+  handleAdd = async () => {
+    // remove all current phrases first
+    await this.setState({ phrases: [] })
+    const newPhrases = this.state.phrases.concat(this.generatePhrase())
+    this.setState({ phrases: newPhrases })
+  }
+
+  handleRemove(i) {
+    let newPhrases = this.state.phrases.slice()
+    newPhrases.splice(i, 1)
+    this.setState({ phrases: newPhrases })
+  }
+
+  renderPhrases = () => {
+    const { classes } = this.props
+    const phrases = this.state.phrases.map((item, i) => (
+      <div
+        className={classes.phraseItem}
+        key={item}
+        onClick={() => this.handleRemove(i)}>
+        {item}
+      </div>
+    ))
+    return phrases
+  }
+
+  render() {
+    const { classes } = this.props
+    const phrases = this.renderPhrases()
     return (
-      <ReactCSSTransitionGroup
-        transitionName="example"
-        transitionAppear={true}
-        transitionAppearTimeout={2000}
-        transitionEnter={false}
-        transitionLeave={false}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}>
-          <span style={{ fontSize: "100px", }}>
-            {phrase}
-          </span>
-        </div>
-      </ReactCSSTransitionGroup>
+      <div>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => this.handleAdd()}
+          className={classes.button}>
+          GO TEAM
+        </Button>
+        <ReactCSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={1000}
+          transitionLeaveTimeout={200}>
+          {/* <div className={classes.phraseItem}>{phrases}</div> */}
+          {phrases}
+        </ReactCSSTransitionGroup>
+      </div>
     )
   }
 }
+
+export default withStyles(styles)(GoTeam)

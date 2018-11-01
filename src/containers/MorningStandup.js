@@ -14,7 +14,8 @@ import UserStandUpDetails from "../components/UserStandupDetails/index"
 
 const styles = theme => ({
   root: {
-    width: "90%",
+    // width: "90%",
+    width: "100%",
   },
   button: {
     marginTop: theme.spacing.unit,

@@ -30,3 +30,33 @@
     transform: rotate(360deg);
   }
 }
+
+.example-enter {
+  /* height: 100px;
+  width: 100px; */
+  color: #c00;
+  transition: all 1s ease;
+  position: relative;
+  /* top: 30%; */
+  /* left: 0; */
+  /* left: -20%; */
+  left: -600px;
+  /* left: 0%; */
+}
+
+.example-enter.example-enter-active {
+  /* left: 20%; */
+  left: 0;
+  /* color: blue; */
+  /* margin-left: -100px; */
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  /* transition: opacity 300ms ease-in; */
+  transition: opacity 0ms ease-in;
+}

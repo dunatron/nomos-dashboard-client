@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react"
 import { withRouter } from "react-router"
 import { graphql, withApollo, compose } from "react-apollo"
+import CircularProgress from "@material-ui/core/CircularProgress"
 
 // Queries
 // import { SINGLE_DOCUMENT_QUERY } from "../queries/singleDocument"
@@ -9,6 +10,8 @@ import { ALL_USERS } from "../../queries/AllUsers.graphql"
 // Mutations
 // import { POST_SECTION_MUTATION } from "../mutations/postSection"
 // import { UPDATE_SECTION_POSITION } from "../mutations/updateSectionPosition"
+// Components
+import UserList from "./UserList"
 
 class UserStandUpDetails extends Component {
   render() {
@@ -29,32 +32,20 @@ class UserStandUpDetails extends Component {
     } = this.props
 
     if (loading) {
-      return "Loading User Data"
+      return (
+        <CircularProgress
+          style={{ padding: 40 }}
+          color="secondary"
+          thickness={7}
+        />
+      )
     }
 
     if (error) {
       return "an error ocurred"
     }
 
-    return (
-      <div>
-        <h1>User Stand Up Details</h1>
-        {allUsers &&
-          allUsers.map(user => {
-            return (
-              <div>
-                <h1>{user.name}</h1>
-                <p>id: {user.role}</p>
-                <p>id: {user.id}</p>
-                <p>
-                  A big component card to record some details and on save do its
-                  thing
-                </p>
-              </div>
-            )
-          })}
-      </div>
-    )
+    return <UserList allUsers={allUsers} />
   }
 }
 
