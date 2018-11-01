@@ -10,10 +10,13 @@
     "apollo-client": "^2.4.5",
     "apollo-link-context": "^1.0.9",
     "apollo-link-ws": "^1.0.9",
+    "babel-plugin-import-graphql": "^2.6.2",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
     "react": "^16.6.0",
+    "react-addons-css-transition-group": "^15.6.2",
     "react-apollo": "^2.2.4",
+    "react-app-rewire-inline-import-graphql-ast": "^1.1.1",
     "react-dom": "^16.6.0",
     "react-redux": "^5.1.0",
     "react-router-dom": "^4.3.1",
@@ -25,9 +28,9 @@
     "subscriptions-transport-ws": "^0.9.15"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "rm -rf ./node_modules/.cache/babel-loader && react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -38,5 +41,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "react-app-rewired": "^1.6.2"
+  }
 }

@@ -62,7 +62,7 @@ const teamRhymes = [
   "Theme",
 ]
 
-export default class App extends Component {
+export default class GoTeam extends Component {
   constructor() {
     super()
     this.state = { show: false }
@@ -88,7 +88,7 @@ export default class App extends Component {
             alignItems: "center",
             justifyContent: "center",
           }}>
-          <span style={{ marginTop: 200, fontSize: "100px", maxWidth: "50%" }}>
+          <span style={{ fontSize: "100px", }}>
             {phrase}
           </span>
         </div>

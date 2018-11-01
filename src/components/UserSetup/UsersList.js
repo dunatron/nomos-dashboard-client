@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from "react"
 import { withRouter } from "react-router"
 import { graphql, compose, withApollo } from "react-apollo"
-import { ALL_USERS } from "../../queries/allUsers"
+// import { ALL_USERS } from "../../queries/allUsers"
+import { ALL_USERS } from "../../queries/AllUsers.graphql"
 import { Query } from "react-apollo"
 // Components
 import UserCard from "./UserCard"

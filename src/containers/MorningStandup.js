@@ -8,6 +8,9 @@ import StepContent from "@material-ui/core/StepContent"
 import Button from "@material-ui/core/Button"
 import Paper from "@material-ui/core/Paper"
 import Typography from "@material-ui/core/Typography"
+// COmponent Steps
+import GoTeam from "../components/GoTeam/index"
+import UserStandUpDetails from "../components/UserStandupDetails/index"
 
 const styles = theme => ({
   root: {
@@ -26,27 +29,24 @@ const styles = theme => ({
 })
 
 function getSteps() {
-  return ["Select campaign settings", "Create an ad group", "SHOUT IT!"]
+  return ["Pre Standup", "Member standup details", "SHOUT IT!"]
 }
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`
-    case 1:
-      return "An ad group contains one or more ads which target a shared set of keywords."
-    case 2:
       return (
         <div>
-          <iframe
-            height={"450px"}
-            width={"450px"}
-            src="https://sonicsmith.github.io/go-team/"
-          />
+          <ul>
+            <li>Get any remote users on video conference.</li>
+            <li>Make sure the remote users can communicate with the team.</li>
+          </ul>
         </div>
       )
+    case 1:
+      return <UserStandUpDetails />
+    case 2:
+      return <GoTeam />
     default:
       return "Unknown step"
   }
