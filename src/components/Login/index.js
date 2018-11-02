@@ -149,15 +149,10 @@ class Login extends Component {
   }
 
   _saveUserData = (token, user) => {
-    alert("Check the console. for the user data => ")
-
     const userObj = {
       ...user,
       token: token,
     }
-    console.log("Token data => ", token)
-    console.log("User data => ", user)
-    console.log("The userObject => ", userObj)
     this.props.setUserDetails(userObj)
   }
 }

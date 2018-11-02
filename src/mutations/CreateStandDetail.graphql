@@ -1,0 +1,7 @@
+mutation createStandupDetail($userId: ID!, $timeTaken: Int, $notes: String) {
+  createStandupDetail(userId: $userId, timeTaken: $timeTaken, notes: $notes) {
+    id
+    timeTaken
+    notes
+  }
+}

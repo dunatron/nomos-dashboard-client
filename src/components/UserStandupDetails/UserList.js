@@ -6,32 +6,19 @@ import UserCard from "./UserCard"
 
 const styles = theme => ({
   container: {
-    marginRight: "auto",
-    marginLeft: "auto",
-    maxWidth: "320px",
-    padding: `${theme.spacing.unit * 3}px`,
-  },
-  title: {
-    textAlign: "center",
-    fontSize: "22px",
-    color: theme.palette.primary.main,
-  },
-  form: {
+    // padding: `${theme.spacing.unit * 2}px`,
+    padding: theme.spacing.unit * 2,
     display: "flex",
-    flexDirection: "column",
-  },
-  actions: {
-    display: "flex",
-    flexDirection: "column",
+    alignItems: "center",
+    flexWrap: "wrap",
   },
 })
 
 class UserList extends Component {
   render() {
-    const { allUsers } = this.props
+    const { classes, allUsers } = this.props
     return (
-      <div>
-        <h1>User Stand Up Details</h1>
+      <div className={classes.container}>
         {allUsers && allUsers.map(user => <UserCard user={user} />)}
       </div>
     )

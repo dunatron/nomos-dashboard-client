@@ -2,20 +2,19 @@ import React, { Component, Fragment } from "react"
 import { withRouter } from "react-router"
 import { graphql, withApollo, compose } from "react-apollo"
 import CircularProgress from "@material-ui/core/CircularProgress"
-
-// Queries
-// import { SINGLE_DOCUMENT_QUERY } from "../queries/singleDocument"
-// import DOCUMENT_QUERY from "../queries/Document.graphql"
-import { ALL_USERS } from "../../queries/AllUsers.graphql"
-// Mutations
-// import { POST_SECTION_MUTATION } from "../mutations/postSection"
-// import { UPDATE_SECTION_POSITION } from "../mutations/updateSectionPosition"
+import { ROLE_OPTIONS, ROLE_PROJECT_MANAGER } from "../../constants"
 // Components
 import UserList from "./UserList"
+import MultiSelect from "../Inputs/MultiSelect"
+// Queries
+import { ALL_USERS } from "../../queries/AllUsers.graphql"
 
 class UserStandUpDetails extends Component {
+  state = {
+    filterRoles: [ROLE_PROJECT_MANAGER.value],
+    // filterRoles: [],
+  }
   render() {
-    console.log("UserStandUpDetails PROPS => ", this.props)
     const {
       data: {
         allUsers,
@@ -44,8 +43,21 @@ class UserStandUpDetails extends Component {
     if (error) {
       return "an error ocurred"
     }
-
-    return <UserList allUsers={allUsers} />
+    return (
+      <div>
+        <MultiSelect
+          label="Select the user roles"
+          values={this.state.filterRoles}
+          handleChange={v => this.setState({ filterRoles: v })}
+          options={ROLE_OPTIONS}
+        />
+        <UserList
+          allUsers={allUsers.filter(u =>
+            this.state.filterRoles.includes(u.role)
+          )}
+        />
+      </div>
+    )
   }
 }
 
@@ -56,10 +68,6 @@ class UserStandUpDetails extends Component {
 
 export default compose(
   graphql(ALL_USERS),
-  // graphql(POST_SECTION_MUTATION, { name: "postSection" }),
-  // graphql(UPDATE_SECTION_POSITION, { name: "updateSectionPosition" }),
-
-  // withStyles(styles),
   withApollo
   // reduxWrapper
 )(UserStandUpDetails)

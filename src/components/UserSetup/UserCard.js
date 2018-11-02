@@ -4,11 +4,12 @@ import { withStyles } from "@material-ui/core/styles"
 import Card from "@material-ui/core/Card"
 import CardActions from "@material-ui/core/CardActions"
 import CardContent from "@material-ui/core/CardContent"
-import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
 import FormGroup from "@material-ui/core/FormGroup"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import Switch from "@material-ui/core/Switch"
+import { ROLE_OPTIONS } from "../../constants"
+
+// Components
+import SelectOption from "../Inputs/SelectOption"
 
 const styles = {
   card: {
@@ -51,43 +52,17 @@ const UserCard = ({ user, classes, handleRoleChange, setUserRole }) => {
       </CardContent>
       <CardActions>
         <FormGroup>
-          {/* <FormControlLabel
-            control={
-              <Switch
-                checked={role === "ADMIN"}
-                onChange={handleRoleChange}
-                aria-label="RoleSwitch"
-              />
-            }
-            label={role}
-          /> */}
           {role !== "WIZARD" ? (
             <div>
-              <div onClick={() => setUserRole("DEVELOPER")}>
-                Set as DEVELOPER
-              </div>
-              <div onClick={() => setUserRole("PROJECT_MANAGER")}>
-                Set as PROJECT_MANAGER
-              </div>
-              <div onClick={() => setUserRole("ONBOARDER")}>
-                Set as ONBOARDER
-              </div>
+              <SelectOption
+                value={role}
+                options={ROLE_OPTIONS}
+                handleChange={r => setUserRole(r)}
+              />
             </div>
           ) : (
-            "This man is a wizard and cannot be altered"
+            "This man is a wizard and cannot be altered by the likes of you"
           )}
-          {/* {role !== "WIZARD" && (
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={role === "ADMIN"}
-                  onChange={handleRoleChange}
-                  aria-label="RoleSwitch"
-                />
-              }
-              label={role}
-            />
-          )} */}
         </FormGroup>
       </CardActions>
     </Card>

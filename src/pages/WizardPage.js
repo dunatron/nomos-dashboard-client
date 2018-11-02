@@ -10,7 +10,6 @@ class WizardsPage extends Component {
   render() {
     return (
       <div>
-        <h1>YOOOO I AM THE WIZARDS PAGE!</h1>
         <WizardContainer />
       </div>
     )

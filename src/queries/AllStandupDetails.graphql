@@ -1,0 +1,11 @@
+query {
+  getStandupDetails {
+    id
+    notes
+    timeTaken
+    createdAt
+    forUser {
+      name
+    }
+  }
+}

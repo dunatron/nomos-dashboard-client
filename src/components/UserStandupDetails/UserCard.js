@@ -7,6 +7,16 @@ import CardContent from "@material-ui/core/CardContent"
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
 import DoneIcon from "@material-ui/icons/Done"
+import { NOMOS_USER_ROLES } from "../../constants"
+// GraphQL
+import { graphql, withApollo, compose } from "react-apollo"
+// Mutations
+// import CREATE_STANDUP_DETAILS from "../../mutations/CreateStandupDetails.graphql"
+import { CREATE_STANDUP_DETAIL } from "../../mutations/CreateStandDetail.graphql"
+
+// components
+import Timer from "../Timer/index"
+import TextInput from "../Inputs/TextInput"
 
 const styles = theme => ({
   card: {
@@ -31,7 +41,8 @@ class UserCard extends Component {
   state = {
     notes: null,
     finished: false,
-    talkTime: 0,
+    uploading: false,
+    timeTaken: 0,
   }
 
   handleNotesChange = val => {
@@ -45,6 +56,34 @@ class UserCard extends Component {
       finished: true,
     })
   }
+  updateTimeTaken = t => {
+    this.setState({
+      timeTaken: t,
+    })
+  }
+
+  _createStandupDetails = async () => {
+    // UPDATE_SECTION_MUTATION
+    await this.setState({
+      uploading: true,
+    })
+    await this.props.createStandupDetail({
+      variables: {
+        userId: this.props.user.id,
+        timeTake: this.state.timeTaken,
+        notes: this.state.notes,
+      },
+    })
+    this.setState({
+      uploading: false,
+      finished: true,
+    })
+  }
+
+  getRoleName = role => {
+    const userRole = NOMOS_USER_ROLES.find(r => r.value === role)
+    return userRole.name
+  }
 
   render() {
     const {
@@ -52,7 +91,7 @@ class UserCard extends Component {
       handleClick,
       user: { id, name, email, role },
     } = this.props
-    const { notes, finished, talkTime } = this.state
+    const { notes, finished, timeTaken } = this.state
 
     if (finished) {
       return (
@@ -60,7 +99,7 @@ class UserCard extends Component {
           <div className={classes.doneStrip}>
             <DoneIcon color="secondary" />
             <span className={classes.doneText}>
-              {name} - {talkTime} - {notes}
+              {name} - {timeTaken} - {notes}
             </span>
           </div>
         </Card>
@@ -70,20 +109,26 @@ class UserCard extends Component {
     return (
       <Card className={classes.card}>
         <CardContent>
-          <h1>{name}</h1>
-          <p>{id}</p>
-          <p>{email}</p>
-          <p>{role}</p>
-          <Button size="small" onClick={handleClick} color={"primary"}>
-            Start Timer
-          </Button>
-          <div>
-            NOTES:{" "}
-            <input
-              value={notes}
-              onChange={e => this.handleNotesChange(e.target.value)}
-            />
-          </div>
+          <Typography
+            gutterBottom
+            variant="title"
+            component="h1"
+            color="primary">
+            {name}
+          </Typography>
+          <Typography gutterBottom variant="subtitle1" component="p">
+            {/* {role} */}
+            {this.getRoleName(role)}
+          </Typography>
+          {/* <Typography gutterBottom variant="subheading" component="p">
+            {email}
+          </Typography> */}
+          <Timer timeTaken={t => this.updateTimeTaken(t)} />
+          <TextInput
+            label="Notes"
+            value={notes}
+            handleChange={v => this.handleNotesChange(v)}
+          />
         </CardContent>
         <CardActions>
           {finished ? (
@@ -93,7 +138,7 @@ class UserCard extends Component {
           ) : (
             <Button
               size="small"
-              onClick={() => this._updateUserStandup()}
+              onClick={() => this._createStandupDetails()}
               color={"primary"}>
               Finish Rant
             </Button>
@@ -108,40 +153,9 @@ UserCard.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(UserCard)
-
-// const timer = () => {}
-
-// const UserCard = ({
-// classes,
-// handleClick,
-// user: { id, name, email, role },
-// }) => {
-//   return (
-// <Card className={classes.card}>
-//   <CardContent>
-//     <h1>{name}</h1>
-//     <p>{id}</p>
-//     <p>{email}</p>
-//     <p>{role}</p>
-//     <Button size="small" onClick={handleClick} color={"primary"}>
-//       Start Timer
-//     </Button>
-//     <div>
-//       NOTES: <input />
-//     </div>
-//   </CardContent>
-//   <CardActions>
-//     <Button size="small" onClick={handleClick} color={"primary"}>
-//       Finish Rant
-//     </Button>
-//   </CardActions>
-// </Card>
-//   )
-// }
-
-// UserCard.propTypes = {
-//   classes: PropTypes.object.isRequired,
-// }
-
 // export default withStyles(styles)(UserCard)
+export default compose(
+  withStyles(styles),
+  graphql(CREATE_STANDUP_DETAIL, { name: "createStandupDetail" }),
+  withApollo
+)(UserCard)
