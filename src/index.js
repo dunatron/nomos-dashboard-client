@@ -21,6 +21,12 @@ import { PERSISTENT_STORE_KEYS_ARR } from "./constants"
 import store from "./state/store"
 import { Provider as Redux } from "react-redux"
 
+// Material Design
+/* eslint-disable */
+import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider"
+// pick utils
+import MomentUtils from "material-ui-pickers/utils/moment-utils"
+
 // Redux function which will help us subscribe our store state, using our saveState function
 store.subscribe(
   throttle(() => {
@@ -80,7 +86,9 @@ ReactDOM.render(
   <Redux store={store}>
     <BrowserRouter>
       <ApolloProvider client={client}>
-        <App />
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <App />
+        </MuiPickersUtilsProvider>
       </ApolloProvider>
     </BrowserRouter>
   </Redux>,

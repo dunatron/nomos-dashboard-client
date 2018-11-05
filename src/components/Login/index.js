@@ -16,6 +16,7 @@ const SIGNUP_MUTATION = gql`
     signup(email: $email, password: $password, name: $name) {
       token
       user {
+        id
         name
         email
         role
@@ -29,6 +30,7 @@ const LOGIN_MUTATION = gql`
     login(email: $email, password: $password) {
       token
       user {
+        id
         name
         email
         role

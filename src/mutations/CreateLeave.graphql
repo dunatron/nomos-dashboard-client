@@ -1,0 +1,24 @@
+mutation createLeave(
+  $userId: ID!
+  $lastDayOfWork: DateTime!
+  $firstDayOfLeave: DateTime!
+  $lastDayOfLeave: DateTime!
+  $firstDayOfWork: DateTime!
+  $daysOfLeave: Int!
+  $publicHolidays: Int!
+  $type: LEAVE_TYPE!
+) {
+  createLeave(
+    lastDayOfWork: $lastDayOfWork
+    firstDayOfLeave: $firstDayOfLeave
+    lastDayOfLeave: $lastDayOfLeave
+    firstDayOfWork: $firstDayOfWork
+    daysOfLeave: $daysOfLeave
+    publicHolidays: $publicHolidays
+    type: $type
+    userId: $userId
+  ) {
+    id
+    totalLeaveDays
+  }
+}

@@ -1,0 +1,15 @@
+query {
+  getAllLeave {
+    lastDayOfWork
+    firstDayOfLeave
+    lastDayOfLeave
+    firstDayOfWork
+    daysOfLeave
+    publicHolidays
+    totalLeaveDays
+    forUser {
+      id
+      name
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import HomePage from "../pages/HomePage"
 import WizardPage from "../pages/WizardPage"
 import MorningStandupPage from "../pages/MorningStandupPage"
+import LeavePage from "../pages/LeavePage"
+import AllLeavePage from "../pages/AllLeavePage"
 
 const rootRoutes = [
   {
@@ -28,6 +30,22 @@ const rootRoutes = [
     // restricted: ["WIZARD"],
     restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
     component: MorningStandupPage,
+  },
+  {
+    title: "Apply for Leave",
+    path: "/leave",
+    panel: true,
+    main: true,
+    restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
+    component: LeavePage,
+  },
+  {
+    title: "Applied Leave",
+    path: "/applied-leave",
+    panel: true,
+    main: true,
+    restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
+    component: AllLeavePage,
   },
 ]
 
