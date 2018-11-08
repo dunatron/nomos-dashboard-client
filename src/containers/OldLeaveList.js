@@ -1,14 +1,26 @@
 import React, { Component, Fragment } from "react"
-import { graphql, compose, withApollo } from "react-apollo"
-import { Query } from "react-apollo"
+import PropTypes from "prop-types"
+import { graphql, withApollo, compose } from "react-apollo"
 import { withStyles } from "@material-ui/core/styles"
+
+import Icon from "@material-ui/core/Icon"
+import IconButton from "@material-ui/core/IconButton"
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart"
+import ThumbUpSharpIcon from "@material-ui/icons/ThumbUpSharp"
+
 // components
 import SuperTable from "../components/SuperTable/index"
 
+// Redux
+import { connect } from "react-redux"
 // queries
 import { ALL_LEAVE } from "../queries/AllLeave.graphql"
 // mutations
 import { ACCEPT_LEAVE } from "../mutations/AcceptLeave.graphql"
+
+const styles = theme => ({
+  root: {},
+})
 
 const COLUMN_HEADERS = [
   {
@@ -18,7 +30,6 @@ const COLUMN_HEADERS = [
     label: "daysOfLeave",
     show: true,
     tableRenderKey: "th",
-    found: "daysOfLeave",
   },
   {
     id: "firstDayOfLeave",
@@ -41,7 +52,7 @@ const COLUMN_HEADERS = [
     numeric: false,
     disablePadding: true,
     label: "Accept leave ",
-    show: true,
+    show: false,
     type: "btnFunc",
     // icon: (
     //   <IconButton color="primary" aria-label="Add to shopping cart">
@@ -63,10 +74,10 @@ const COLUMN_HEADERS = [
   //   tableRenderKey: "th",
   // },
   {
-    id: "forUser.name",
+    id: "name",
     numeric: false,
     disablePadding: true,
-    label: "User",
+    label: "posted by",
     show: true,
     type: "deep",
     found: "forUser.name",
@@ -149,26 +160,74 @@ const COLUMN_HEADERS = [
   // { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" },
 ]
 
-const styles = theme => ({
-  root: {},
-})
 class LeaveList extends Component {
+  renderLeaveItem = leave => {
+    return (
+      <div>
+        <p>
+          User
+          <span>{leave.forUser.name}</span>
+        </p>
+        <p>
+          lastDayOfWork
+          <span>{leave.lastDayOfWork}</span>
+        </p>
+        <p>
+          firstDayOfLeave
+          <span>{leave.firstDayOfLeave}</span>
+        </p>
+        <p>
+          lastDayOfLeave
+          <span>{leave.lastDayOfLeave}</span>
+        </p>
+        <p>
+          firstDayOfWork
+          <span>{leave.firstDayOfWork}</span>
+        </p>
+        <p>
+          daysOfLeave
+          <span>{leave.daysOfLeave}</span>
+        </p>
+        <p>
+          publicHolidays
+          <span>{leave.publicHolidays}</span>
+        </p>
+        <p>
+          totalLeaveDays
+          <span>{leave.totalLeaveDays}</span>
+        </p>
+      </div>
+    )
+  }
+
   acceptLeave = async ({ id }) => {
-    // 1. actually only need first step, cache seems to update...
+    console.log("trying to accept leave")
     const acceptedLeave = await this.props.acceptLeave({
       variables: {
         id: id,
       },
     })
-    // 2. ready leaveData and store in variable
-    const leaveData = this.props.client.readQuery({
-      query: ALL_LEAVE,
+
+    const leaveData = this.props.store.readQuery({
+      ALL_LEAVE,
     })
-    // 3. get item that we will mutate
-    const cachedLeaveItem = leaveData.getAllLeave.find(leave => leave.id === id)
-    // 4. mutate this item
-    cachedLeaveItem.status = acceptedLeave.data.acceptLeave.status
-    // 5. usually have to write query back into the cached store.  Note: wasn't working
+    console.log("Our Leave Data => ", leaveData)
+
+    // // const data = store.readQuery({
+    // //   query: FEED_QUERY,
+    // //   variables: { first, skip, orderBy },
+    // // })
+
+    // // const votedSample = data.feed.samples.find(sample => sample.id === sampleId)
+    // // votedSample.votes = createVote.sample.votes
+    // // store.writeQuery({ query: FEED_QUERY, data })
+    // acceptedLeave.then(res => {
+    //   console.log("Our result to update the cache with => ", res)
+
+    // })
+    console.log("acceptedLeave returned Obj => ", acceptedLeave)
+    alert("Accept leave")
+    // 1. create an acceptLeave mutation. it will accept an id, and send email, update status
   }
 
   executeFunctionByName = (functionName, dataObj /*, args */) => {
@@ -188,41 +247,56 @@ class LeaveList extends Component {
     }
   }
 
-  helloWorld = () => {
-    alert("HELLO WORLD!")
-  }
-
   render() {
+    const {
+      classes,
+      allLeave: { loading, error, getAllLeave, fetchMore },
+    } = this.props
+    console.log("The props of the leave list => ", this.props)
+
+    if (loading) {
+      return "Loading the leave list"
+    }
+
+    if (error) {
+      return "soz an error ran"
+    }
+
     return (
-      <Query query={ALL_LEAVE}>
-        {({ loading, error, data, subscribeToMore }) => {
-          if (loading) return <div>Fetching</div>
-          if (error) return <div>Error</div>
-
-          console.log("Here is data ", data)
-
-          return (
-            <Fragment>
-              <h1>New Leave Table</h1>
-
-              <SuperTable
-                columnHeaders={COLUMN_HEADERS}
-                title="Table of Code Samples"
-                data={data.getAllLeave}
-                executeFunc={(funcName, obj) => {
-                  this.executeFunctionByName(funcName, obj)
-                }}
-              />
-            </Fragment>
-          )
-        }}
-      </Query>
+      <div>
+        <h1>The Leave list</h1>
+        <SuperTable
+          columnHeaders={COLUMN_HEADERS}
+          title="Table of Code Samples"
+          data={getAllLeave}
+          executeFunc={(funcName, obj) => {
+            this.executeFunctionByName(funcName, obj)
+          }}
+        />
+        {getAllLeave &&
+          getAllLeave.map(leave => {
+            console.log("Al leave item => ", leave)
+            return this.renderLeaveItem(leave)
+          })}
+      </div>
     )
+
+    // return <div className={classes.root} />
   }
 }
 
+LeaveList.propTypes = {
+  classes: PropTypes.object,
+}
+
+const reduxWrapper = connect(state => ({
+  user: state.user,
+}))
+
 export default compose(
+  graphql(ALL_LEAVE, { name: "allLeave" }),
   graphql(ACCEPT_LEAVE, { name: "acceptLeave" }),
+  withApollo,
   withStyles(styles),
-  withApollo
+  reduxWrapper
 )(LeaveList)

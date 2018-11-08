@@ -23,6 +23,7 @@ import CheckBoxSelection from "../Inputs/CheckBoxSelection"
 import SearchFilter from "../Inputs/SearchFilter"
 import SelectOption from "../Inputs/SelectOption"
 import MultiSelect from "../Inputs/MultiSelect"
+import { split, path } from "ramda"
 
 let counter = 0
 
@@ -303,6 +304,8 @@ class SuperTable extends React.Component {
       {}
     )
 
+    console.log("========displayColumns========== ", displayColumns)
+
     this.state = {
       order: "asc",
       orderBy: "calories",
@@ -310,7 +313,7 @@ class SuperTable extends React.Component {
       searchCol: "",
       withSearch: true,
       searchValue: "",
-      // filterProps: [...displayColumns], // Ok when we click on filter Icon the FilterBar will update the state here
+      filterProps: { ...displayColumns }, // Ok when we click on filter Icon the FilterBar will update the state here
       stateData: propData,
       columnHeaders: propColumnHeaders,
       page: 0,
@@ -408,9 +411,20 @@ class SuperTable extends React.Component {
   }
 
   filterData = (data, searchCol, searchVal) => {
+    console.group("filterData")
+    console.log("data => ", data)
+    console.log("searchCol => ", searchCol)
+    console.log("searchVal => ", searchVal)
+
+    const searchParts = split(".", searchCol)
+    console.log("searchParts => ", searchParts)
     const filteredData = data.filter(n =>
-      n[searchCol].toLowerCase().includes(searchVal.toLowerCase())
+      path(searchParts, n)
+        .toString()
+        .toLowerCase()
+        .includes(searchVal.toLowerCase())
     )
+    console.groupEnd()
     return filteredData
   }
 
@@ -431,8 +445,12 @@ class SuperTable extends React.Component {
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, stateData.length - page * rowsPerPage)
 
+    // let processedData =
+    //   searchValue.length > 2 && searchCol.length > 2
+    //     ? this.filterData(data, searchCol, searchValue)
+    //     : data
     let processedData =
-      searchValue.length > 2 && searchCol.length > 2
+      searchValue.length >= 1 && searchCol.length >= 1
         ? this.filterData(data, searchCol, searchValue)
         : data
 

@@ -1,5 +1,9 @@
 query {
   getAllLeave {
+    id
+    status
+    notes
+    createdAt
     lastDayOfWork
     firstDayOfLeave
     lastDayOfLeave

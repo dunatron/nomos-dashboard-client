@@ -1,0 +1,6 @@
+mutation acceptLeave($id: ID!) {
+  acceptLeave(id: $id) {
+    id
+    status
+  }
+}
