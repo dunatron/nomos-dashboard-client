@@ -22,6 +22,8 @@ import DialogPopup from "../DialogPopup/index"
 import CheckBoxSelection from "../Inputs/CheckBoxSelection"
 import SearchFilter from "../Inputs/SearchFilter"
 import SelectOption from "../Inputs/SelectOption"
+import SearchBar from "./SearchBar"
+import FilterBar from "./FilterBar"
 import MultiSelect from "../Inputs/MultiSelect"
 import { split, path } from "ramda"
 
@@ -113,6 +115,7 @@ const toolbarStyles = theme => ({
   root: {
     paddingRight: theme.spacing.unit,
   },
+
   highlight:
     theme.palette.type === "light"
       ? {
@@ -126,6 +129,10 @@ const toolbarStyles = theme => ({
   spacer: {
     flex: "1 1 100%",
   },
+  barHolder: {
+    flexWrap: "wrap",
+    minHeight: 0,
+  },
   actions: {
     color: theme.palette.text.secondary,
   },
@@ -134,60 +141,16 @@ const toolbarStyles = theme => ({
   },
 })
 
-const FilterBar = props => {
-  return (
-    <div>
-      <CheckBoxSelection
-        options={props.columnHeaders}
-        handleOptionChange={optionObj => {
-          props.updateShowProp(optionObj)
-        }}
-      />
-      <MultiSelect
-        values={props.columnHeaders
-          .filter(header => header.show === true)
-          .map(h => {
-            return h.id
-          })}
-        selectID="ooo"
-        label={"Always apply the stuff"}
-        options={props.columnHeaders.map(header => {
-          return {
-            name: header.label,
-            value: header.id,
-          }
-        })}
-        handleChange={values => props.updateShowValues(values)}
-        // handleChange={values => props.updateShowValues(values)}
-      />
-      <SelectOption
-        label="Column Filter"
-        value={props.searchCol}
-        selectID={"SearchFilter"}
-        handleChange={selected => props.updateSearchCol(selected)}
-        options={props.columnHeaders.map((header, hIdx) => {
-          return {
-            name: header.label,
-            value: header.id,
-          }
-        })}
-      />
-      <SearchFilter
-        value={props.searchValue}
-        handleChange={val => props.updateSearch(val)}
-      />
-    </div>
-  )
-}
-
 let EnhancedTableToolbar = props => {
   const {
     numSelected,
     classes,
     columnHeaders,
     title,
+    searchOpen,
     searchValue,
     searchCol,
+    toggleSearch,
     updateSearchCol,
     updateShowValues,
   } = props
@@ -210,6 +173,7 @@ let EnhancedTableToolbar = props => {
           )}
         </div>
         <div className={classes.spacer} />
+
         <div className={classes.actions}>
           {numSelected > 0 ? (
             <Tooltip title="Delete">
@@ -219,15 +183,18 @@ let EnhancedTableToolbar = props => {
             </Tooltip>
           ) : (
             <Tooltip title="Filter list">
-              <IconButton aria-label="Filter list">
+              <IconButton
+                aria-label="Filter list"
+                onClick={() => toggleSearch()}>
                 <FilterListIcon />
               </IconButton>
             </Tooltip>
           )}
         </div>
       </Toolbar>
-      <Toolbar>
+      <Toolbar className={classes.barHolder}>
         <FilterBar
+          open={searchOpen}
           columnHeaders={columnHeaders}
           searchCol={searchCol}
           updateSearchCol={selected => updateSearchCol(selected)}
@@ -235,6 +202,17 @@ let EnhancedTableToolbar = props => {
           updateShowValues={values => updateShowValues(values)}
           updateSearch={val => props.updateSearch(val)}
           updateShowProp={prop => props.updateShowProp(prop)}
+        />
+        <SearchBar
+          open={searchOpen}
+          searchCol={props.searchCol}
+          searchVal={props.searchValue}
+          updateSearchCol={selected => props.updateSearchCol(selected)}
+          updateSearchVal={val => props.updateSearch(val)}
+          options={props.columnHeaders.map(header => ({
+            name: header.label,
+            value: header.id,
+          }))}
         />
       </Toolbar>
     </div>
@@ -310,6 +288,7 @@ class SuperTable extends React.Component {
       order: "asc",
       orderBy: "calories",
       selected: [],
+      searchOpen: false,
       searchCol: "",
       withSearch: true,
       searchValue: "",
@@ -430,6 +409,11 @@ class SuperTable extends React.Component {
 
   isSelected = id => this.state.selected.indexOf(id) !== -1
 
+  toggleBoolean = name =>
+    this.setState({
+      [name]: !this.state[name],
+    })
+
   render() {
     const { classes, title, data } = this.props
     const {
@@ -441,6 +425,7 @@ class SuperTable extends React.Component {
       page,
       searchCol,
       searchValue,
+      searchOpen,
     } = this.state
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, stateData.length - page * rowsPerPage)
@@ -460,6 +445,8 @@ class SuperTable extends React.Component {
           title={title}
           numSelected={selected.length}
           columnHeaders={this.state.columnHeaders}
+          searchOpen={searchOpen}
+          toggleSearch={() => this.toggleBoolean("searchOpen")}
           searchCol={this.state.searchCol}
           updateSearchCol={selected => this.updateSearchCol(selected)}
           searchValue={this.state.searchValue}
