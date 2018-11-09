@@ -7,8 +7,11 @@ import SuperTable from "../components/SuperTable/index"
 
 // queries
 import { ALL_LEAVE } from "../queries/AllLeave.graphql"
+import { LEAVE_FEED } from "../queries/LeaveFeed.graphql"
 // mutations
 import { ACCEPT_LEAVE } from "../mutations/AcceptLeave.graphql"
+// subscriptions
+import { NEW_LEAVES_SUBSCRIPTION } from "../subscriptions/NewLeaveSubscription.graphql"
 
 const COLUMN_HEADERS = [
   {
@@ -162,13 +165,34 @@ class LeaveList extends Component {
     })
     // 2. ready leaveData and store in variable
     const leaveData = this.props.client.readQuery({
-      query: ALL_LEAVE,
+      query: LEAVE_FEED,
     })
     // 3. get item that we will mutate
     const cachedLeaveItem = leaveData.getAllLeave.find(leave => leave.id === id)
     // 4. mutate this item
     cachedLeaveItem.status = acceptedLeave.data.acceptLeave.status
     // 5. usually have to write query back into the cached store.  Note: wasn't working
+  }
+
+  _subscribeToNewLeave = async subscribeToMore => {
+    subscribeToMore({
+      document: NEW_LEAVES_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        console.log("subscriptionData => ", subscriptionData)
+        if (!subscriptionData.data) return prev
+        const newLeave = subscriptionData.data.newLeave.node
+
+        console.log(" prev => ", prev)
+
+        return Object.assign({}, prev, {
+          leaveFeed: {
+            leaves: [newLeave, ...prev.leaveFeed.leaves],
+            count: prev.leaveFeed.leaves.length + 1,
+            __typename: prev.leaveFeed.__typename,
+          },
+        })
+      },
+    })
   }
 
   executeFunctionByName = (functionName, dataObj /*, args */) => {
@@ -194,12 +218,18 @@ class LeaveList extends Component {
 
   render() {
     return (
-      <Query query={ALL_LEAVE}>
+      <Query query={LEAVE_FEED}>
         {({ loading, error, data, subscribeToMore }) => {
           if (loading) return <div>Fetching</div>
           if (error) return <div>Error</div>
 
+          this._subscribeToNewLeave(subscribeToMore)
+
+          const { leaveFeed } = data
+          const { count, leaves } = leaveFeed
+
           console.log("Here is data ", data)
+          console.log("Here is leavesToRender ", leaveFeed)
 
           return (
             <Fragment>
@@ -208,7 +238,7 @@ class LeaveList extends Component {
               <SuperTable
                 columnHeaders={COLUMN_HEADERS}
                 title="Table of Code Samples"
-                data={data.getAllLeave}
+                data={leaves}
                 executeFunc={(funcName, obj) => {
                   this.executeFunctionByName(funcName, obj)
                 }}

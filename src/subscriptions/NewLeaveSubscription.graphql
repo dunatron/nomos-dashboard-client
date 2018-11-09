@@ -1,0 +1,21 @@
+subscription {
+  newLeave {
+    node {
+      id
+      status
+      notes
+      createdAt
+      lastDayOfWork
+      firstDayOfLeave
+      lastDayOfLeave
+      firstDayOfWork
+      daysOfLeave
+      publicHolidays
+      totalLeaveDays
+      forUser {
+        id
+        name
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+query LeaveFeedQuery($first: Int, $skip: Int, $orderBy: LeaveOrderByInput) {
+  leaveFeed(first: $first, skip: $skip, orderBy: $orderBy) {
+    leaves {
+      id
+      status
+      notes
+      createdAt
+      lastDayOfWork
+      firstDayOfLeave
+      lastDayOfLeave
+      firstDayOfWork
+      daysOfLeave
+      publicHolidays
+      totalLeaveDays
+      forUser {
+        id
+        name
+      }
+    }
+    count
+  }
+}
