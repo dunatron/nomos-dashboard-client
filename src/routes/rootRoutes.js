@@ -1,8 +1,12 @@
+import React from "react"
 import HomePage from "../pages/HomePage"
 import WizardPage from "../pages/WizardPage"
 import MorningStandupPage from "../pages/MorningStandupPage"
 import LeavePage from "../pages/LeavePage"
 import AllLeavePage from "../pages/AllLeavePage"
+import LeaveCalendarPage from "../pages/LeaveCalendarPage"
+// Icons
+import ArrowBackIcon from "@material-ui/icons/ArrowBackIos"
 
 const rootRoutes = [
   {
@@ -46,6 +50,15 @@ const rootRoutes = [
     main: true,
     restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
     component: AllLeavePage,
+  },
+  {
+    title: "Leave Calendar",
+    path: "/leave-calendar",
+    icon: <ArrowBackIcon fontSize="72" />,
+    panel: true,
+    main: true,
+    restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
+    component: LeaveCalendarPage,
   },
 ]
 

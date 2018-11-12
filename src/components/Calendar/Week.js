@@ -18,7 +18,7 @@ const styles = theme => ({
   [theme.breakpoints.up("md")]: {
     week: {
       border: "none",
-      "box-shadow": `inset 0 -1px 0 ${fade(theme.palette.primary.main, 0.8)}`,
+      // "box-shadow": `inset 0 -1px 0 ${fade(theme.palette.primary.main, 0.8)}`,
       "&:last-child": {
         "box-shadow": "none",
       },

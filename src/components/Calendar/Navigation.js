@@ -1,6 +1,10 @@
 import React from "react"
 import { withStyles } from "@material-ui/core/styles"
 import { fade } from "@material-ui/core/styles/colorManipulator"
+import Button from "@material-ui/core/Button"
+import CloudUploadIcon from "@material-ui/icons/CloudUpload"
+import ArrowBackIcon from "@material-ui/icons/ArrowBackIos"
+import ArrowForwardIcon from "@material-ui/icons/ArrowForwardIos"
 
 const styles = theme => ({
   root: {
@@ -10,16 +14,29 @@ const styles = theme => ({
     height: theme.spacing.unit * 8,
     background: fade(theme.palette.primary.main, 0.5),
   },
-  item: {
-    flex: "1 1 0",
-    textAlign: "center",
+  date: {
+    fontSize: "22px",
   },
 })
 const Navigation = ({ classes, date, prev, next, changeMonth }) => (
   <div className={classes.root}>
-    <button onClick={() => changeMonth(-1)}>{prev}</button>
-    {date}
-    <button onClick={() => changeMonth(1)}>{next}</button>
+    <Button
+      onClick={() => changeMonth(-1)}
+      // variant="outlined"
+      color="secondary"
+      className={classes.button}>
+      <ArrowBackIcon className={classes.rightIcon} />
+      {prev}
+    </Button>
+    <div className={classes.date}>{date}</div>
+    <Button
+      onClick={() => changeMonth(1)}
+      // variant="outlined"
+      color="secondary"
+      className={classes.button}>
+      {next}
+      <ArrowForwardIcon className={classes.rightIcon} />
+    </Button>
   </div>
 )
 

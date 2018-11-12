@@ -8,7 +8,7 @@ const styles = theme => ({
   root: {
     padding: "2px 4px",
     margin: "0 0 4px 0",
-    borderBottom: "1px dashed lightgrey",
+    borderBottom: `1px dashed ${fade(theme.palette.secondary.main, 0.5)}`,
   },
 })
 class Item extends Component {
