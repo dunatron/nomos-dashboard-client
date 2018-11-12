@@ -22,6 +22,7 @@ import store from "./state/store"
 import { Provider as Redux } from "react-redux"
 
 // Material Design
+import { MuiThemeProvider } from "@material-ui/core/styles"
 /* eslint-disable */
 import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider"
 // pick utils

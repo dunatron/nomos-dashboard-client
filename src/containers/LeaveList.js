@@ -2,8 +2,10 @@ import React, { Component, Fragment } from "react"
 import { graphql, compose, withApollo } from "react-apollo"
 import { Query } from "react-apollo"
 import { withStyles } from "@material-ui/core/styles"
+import moment from "moment"
 // components
 import SuperTable from "../components/SuperTable/index"
+import Calendar from "../components/Calendar/index"
 
 // queries
 import { ALL_LEAVE } from "../queries/AllLeave.graphql"
@@ -28,6 +30,14 @@ const COLUMN_HEADERS = [
     numeric: false,
     disablePadding: true,
     label: "firstDayOfLeave",
+    show: true,
+    tableRenderKey: "th",
+  },
+  {
+    id: "lastDayOfLeave",
+    numeric: false,
+    disablePadding: true,
+    label: "lastDayOfLeave",
     show: true,
     tableRenderKey: "th",
   },
@@ -163,6 +173,7 @@ class LeaveList extends Component {
         id: id,
       },
     })
+    /**
     // 2. ready leaveData and store in variable
     const leaveData = this.props.client.readQuery({
       query: LEAVE_FEED,
@@ -172,6 +183,7 @@ class LeaveList extends Component {
     // 4. mutate this item
     cachedLeaveItem.status = acceptedLeave.data.acceptLeave.status
     // 5. usually have to write query back into the cached store.  Note: wasn't working
+     */
   }
 
   _subscribeToNewLeave = async subscribeToMore => {
@@ -231,13 +243,69 @@ class LeaveList extends Component {
           console.log("Here is data ", data)
           console.log("Here is leavesToRender ", leaveFeed)
 
+          // const calendarData = leaveFeed.leaves
+          //   .filter(l => l.status === "PENDING")
+          //   .map(l => {
+          //     let dates = []
+          //     const firstDay = moment(l.firstDayOfLeave)
+          //     const lastDay = moment(l.lastDayOfLeave)
+          //     const numberOfDays = lastDay.diff(firstDay, "days")
+          //     let objDate = moment(l.firstDayOfLeave)
+          // for (let i = 0; i < numberOfDays; i++) {
+          //   dates.push({
+          //     name: l.forUser.name,
+          //     created: l.createdAt,
+          //     details: "some details about this piece of data",
+          //     date: objDate,
+          //   })
+          //   objDate.add(1, "days")
+          // }
+          //     return dates
+          //     console.group("Leave Dates")
+          //     console.log("l.firstDayofLeave => ", l.firstDayOfLeave)
+          //     console.log("l.lastDayOfLeave => ", l.lastDayOfLeave)
+          //     console.log("l.createdAt => ", l.createdAt)
+          //     console.log("numberOfDays => ", numberOfDays)
+          //     console.groupEnd()
+          //     return {
+          //       name: l.forUser.name,
+          //       created: l.createdAt,
+          //       details: "some details about this piece of data",
+          //       date: moment(),
+          //     }
+          //   })
+          const calendarData = leaveFeed.leaves
+            // .filter(l => l.status === "PENDING")
+            .reduce((acc, leave) => {
+              let dates = []
+              const firstDay = moment(leave.firstDayOfLeave)
+              const lastDay = moment(leave.lastDayOfLeave)
+              const numberOfDays = lastDay.diff(firstDay, "days") + 1
+              let objDate = moment(leave.firstDayOfLeave)
+              for (let i = 0; i < numberOfDays; i++) {
+                dates.push({
+                  name: leave.forUser.name,
+                  created: leave.createdAt,
+                  details: "some details about this piece of data",
+                  // date: objDate.format("DD/MM/YYYY"),
+                  date: objDate,
+                  prettyDate: objDate.format("dddd Do MMMM"),
+                })
+                objDate.add(1, "days")
+              }
+              // return dates
+              return acc.concat(dates)
+            }, [])
+
+          console.log("calendarData ", calendarData)
+
           return (
             <Fragment>
-              <h1>New Leave Table</h1>
-
+              <h1>Employee leave</h1>
+              <Calendar data={calendarData} />
               <SuperTable
                 columnHeaders={COLUMN_HEADERS}
-                title="Table of Code Samples"
+                title="Table of leave"
                 data={leaves}
                 executeFunc={(funcName, obj) => {
                   this.executeFunctionByName(funcName, obj)
