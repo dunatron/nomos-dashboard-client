@@ -9,14 +9,16 @@ class Calendar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      date: moment(),
+      date: props.initDate ? moment(props.initDate) : moment(),
     }
   }
 
   changeMonth = val => {
+    const newDate = this.state.date.add(val, "months")
     this.setState({
-      date: this.state.date.add(val, "months"),
+      date: newDate,
     })
+    this.props.fetchMoreData({ date: newDate })
   }
 
   renderWeeks(currentDate) {

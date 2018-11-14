@@ -7,6 +7,20 @@ import AllLeavePage from "../pages/AllLeavePage"
 import LeaveCalendarPage from "../pages/LeaveCalendarPage"
 // Icons
 import ArrowBackIcon from "@material-ui/icons/ArrowBackIos"
+import PermContactIcon from "@material-ui/icons/PermContactCalendar"
+import AssignmentIcon from "@material-ui/icons/Assignment"
+import WeekendIcon from "@material-ui/icons/Weekend"
+import DeveloperModeIcon from "@material-ui/icons/DeveloperMode"
+// Weekend
+// DeveloperMode
+
+const styles = {
+  icon: {
+    height: "100%",
+    width: "100%",
+    opacity: 0.4,
+  },
+}
 
 const rootRoutes = [
   {
@@ -20,6 +34,7 @@ const rootRoutes = [
   {
     title: "Wizards Panel",
     path: "/wizard",
+    icon: <DeveloperModeIcon color="primary" style={styles.icon} />,
     panel: true,
     main: true,
     // restricted: ["WIZARD"],
@@ -29,6 +44,7 @@ const rootRoutes = [
   {
     title: "Morning Standup",
     path: "/standup",
+    icon: <WeekendIcon color="primary" style={styles.icon} />,
     panel: true,
     main: true,
     // restricted: ["WIZARD"],
@@ -38,6 +54,7 @@ const rootRoutes = [
   {
     title: "Apply for Leave",
     path: "/leave",
+    icon: <AssignmentIcon color="primary" style={styles.icon} />,
     panel: true,
     main: true,
     restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
@@ -46,6 +63,7 @@ const rootRoutes = [
   {
     title: "Applied Leave",
     path: "/applied-leave",
+    icon: <ArrowBackIcon color="primary" style={styles.icon} />,
     panel: true,
     main: true,
     restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
@@ -54,7 +72,7 @@ const rootRoutes = [
   {
     title: "Leave Calendar",
     path: "/leave-calendar",
-    icon: <ArrowBackIcon fontSize="72" />,
+    icon: <PermContactIcon color="primary" style={styles.icon} />,
     panel: true,
     main: true,
     restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],

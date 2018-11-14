@@ -32,7 +32,8 @@ const styles = theme => ({
   },
   title: {
     marginBottom: 16,
-    fontSize: 14,
+    fontSize: 18,
+    backgroundColor: "rgba(255,255,255, 0.5)",
   },
 })
 
@@ -41,21 +42,22 @@ const RoutePanel = ({ classes, handleClick, route: { title, url, icon } }) => {
     <Card className={classes.card}>
       {icon && (
         <div className={classes.underLay}>
-          <Icon fontSize={"72px"}>{icon}</Icon>
-          <span>I will be an icon overlay</span>
-          <span>I will be an icon overlay</span>
-          <span>I will be an icon overlay</span>
-          <span>I will be an icon overlay</span>
+          {/* <Icon >{icon}</Icon> */}
+          {icon}
         </div>
       )}
       <div className={classes.cardInner}>
         <CardContent>
-          <Typography className={classes.title} color="textSecondary">
+          <Typography className={classes.title} color="textPrimary">
             {title}
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={handleClick} color={"primary"}>
+          <Button
+            size="small"
+            // variant="outlined"
+            onClick={handleClick}
+            color={"primary"}>
             Launch
           </Button>
         </CardActions>

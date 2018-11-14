@@ -1,5 +1,10 @@
-query LeaveFeedQuery($first: Int, $skip: Int, $orderBy: LeaveOrderByInput) {
-  leaveFeed(first: $first, skip: $skip, orderBy: $orderBy) {
+query LeaveFeedQuery(
+  $filter: String
+  $first: Int
+  $skip: Int
+  $orderBy: LeaveOrderByInput
+) {
+  leaveFeed(filter: $filter, first: $first, skip: $skip, orderBy: $orderBy) {
     leaves {
       id
       status

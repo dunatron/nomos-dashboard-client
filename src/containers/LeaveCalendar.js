@@ -37,10 +37,25 @@ class LeaveList extends Component {
     })
   }
 
+  _fetchMoreLeave = async (filterProps, fetchMore) => {
+    console.group("_fetchMoreLeave")
+    console.log("filterProps => ", filterProps)
+    console.log("fetchMore => ", fetchMore)
+    console.groupEnd()
+  }
+
   render() {
+    console.log("Leave Calendar props => ", this.props)
     return (
-      <Query query={LEAVE_FEED}>
-        {({ loading, error, data, subscribeToMore }) => {
+      <Query
+        query={LEAVE_FEED}
+        variables={{
+          first: 10,
+          skip: 0,
+          filter: moment().format("YYYY-MM-DD hh:mm a"),
+        }}
+        fetchPolicy="cache-and-network">
+        {({ loading, error, data, subscribeToMore, fetchMore }) => {
           if (loading) return <div>Fetching</div>
           if (error) return <div>Error</div>
 
@@ -48,6 +63,12 @@ class LeaveList extends Component {
 
           const { leaveFeed } = data
           const { count, leaves } = leaveFeed
+
+          console.group("leaveFeed")
+          console.log("leaveFeed => ", leaveFeed)
+          console.log("count => ", count)
+          console.log("leaves => ", leaves)
+          console.groupEnd()
 
           const calendarData = leaveFeed.leaves
             .filter(l => l.status === "ACCEPTED")
@@ -71,7 +92,13 @@ class LeaveList extends Component {
               return acc.concat(dates)
             }, [])
 
-          return <Calendar data={calendarData} />
+          return (
+            <Calendar
+              initDate={moment()}
+              data={calendarData}
+              fetchMoreData={props => this._fetchMoreLeave(props, fetchMore)}
+            />
+          )
         }}
       </Query>
     )
