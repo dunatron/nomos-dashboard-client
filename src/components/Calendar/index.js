@@ -46,7 +46,11 @@ class Calendar extends Component {
       weeks.push(
         <Week
           WeekNumber={count + 1}
-          data={this.props.data.filter(d => d.date.isSame(date, "month"))}
+          data={
+            this.props.data
+              ? this.props.data.filter(d => d.date.isSame(date, "month"))
+              : []
+          }
           startWeek={startWeek}
           endWeek={endOfWeek}
           key={date.toString()}
@@ -77,6 +81,18 @@ class Calendar extends Component {
       .format("MMMM")
     return (
       <Fragment>
+        {this.props.loading ? (
+          <div
+            style={{
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              backgroundColor: "rgba(255,255,255,0.5)",
+              zIndex: 9999,
+            }}>
+            Loading overlay
+          </div>
+        ) : null}
         <Navigation
           date={date.format("MMMM YYYY")}
           prev={prevMonth}

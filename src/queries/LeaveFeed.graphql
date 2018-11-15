@@ -2,9 +2,17 @@ query LeaveFeedQuery(
   $filter: String
   $first: Int
   $skip: Int
+  $betweenFilter: [DateTime!]
   $orderBy: LeaveOrderByInput
 ) {
-  leaveFeed(filter: $filter, first: $first, skip: $skip, orderBy: $orderBy) {
+  leaveFeed(
+    betweenFilter: $betweenFilter
+    filter: $filter
+    first: $first
+    skip: $skip
+    orderBy: $orderBy
+  ) {
+    count
     leaves {
       id
       status
@@ -22,6 +30,5 @@ query LeaveFeedQuery(
         name
       }
     }
-    count
   }
 }

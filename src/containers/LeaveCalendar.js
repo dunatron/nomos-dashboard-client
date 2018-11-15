@@ -16,6 +16,28 @@ const styles = theme => ({
   root: {},
 })
 class LeaveList extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      date: moment(),
+      betweenFilter: this.generateFilterDates(moment()),
+    }
+  }
+
+  generateFilterDates = date => {
+    const betweenFilter = [
+      moment(date)
+        .add(-2, "month")
+        .startOf("month")
+        .format(),
+      moment(date)
+        .add(2, "month")
+        .endOf("month")
+        .format(),
+    ]
+    return betweenFilter
+  }
+
   _subscribeToNewLeave = async subscribeToMore => {
     subscribeToMore({
       document: NEW_LEAVES_SUBSCRIPTION,
@@ -37,11 +59,37 @@ class LeaveList extends Component {
     })
   }
 
-  _fetchMoreLeave = async (filterProps, fetchMore) => {
+  _fetchMoreLeave = async (filterProps, fetchMore, data) => {
+    await this.setState({
+      betweenFilter: this.generateFilterDates(filterProps.date),
+    })
     console.group("_fetchMoreLeave")
     console.log("filterProps => ", filterProps)
     console.log("fetchMore => ", fetchMore)
+    console.log("data => ", data)
     console.groupEnd()
+    const qVars = this._getQueryVariables()
+    fetchMore({
+      variables: { ...qVars },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        console.group("updateQuery")
+        console.log("prev => ", prev)
+        console.log("fetchMoreResult => ", fetchMoreResult)
+        console.groupEnd()
+        if (!fetchMoreResult) return prev
+        return Object.assign({}, prev, {
+          leaveFeed: [...prev.leaveFeed, ...fetchMoreResult.leaveFeed],
+        })
+      },
+    })
+  }
+
+  _getQueryVariables = () => {
+    const first = 100
+    const skip = 0
+    const betweenFilter = this.state.betweenFilter
+    const orderBy = "lastDayOfWork_ASC"
+    return { first, skip, betweenFilter, orderBy }
   }
 
   render() {
@@ -49,14 +97,21 @@ class LeaveList extends Component {
     return (
       <Query
         query={LEAVE_FEED}
-        variables={{
-          first: 10,
-          skip: 0,
-          filter: moment().format("YYYY-MM-DD hh:mm a"),
-        }}
+        variables={this._getQueryVariables()}
         fetchPolicy="cache-and-network">
         {({ loading, error, data, subscribeToMore, fetchMore }) => {
-          if (loading) return <div>Fetching</div>
+          if (loading)
+            return (
+              <Calendar
+                loading={loading}
+                initDate={this.state.date}
+                // data={calendarData}
+                fetchMoreData={props =>
+                  this._fetchMoreLeave(props, fetchMore, data)
+                }
+              />
+            )
+          // if (loading) return <div>Loading</div>
           if (error) return <div>Error</div>
 
           this._subscribeToNewLeave(subscribeToMore)
@@ -71,7 +126,7 @@ class LeaveList extends Component {
           console.groupEnd()
 
           const calendarData = leaveFeed.leaves
-            .filter(l => l.status === "ACCEPTED")
+            // .filter(l => l.status === "ACCEPTED")
             .reduce((acc, leave) => {
               let dates = []
               const firstDay = moment(leave.firstDayOfLeave)
@@ -94,9 +149,11 @@ class LeaveList extends Component {
 
           return (
             <Calendar
-              initDate={moment()}
+              initDate={this.state.date}
               data={calendarData}
-              fetchMoreData={props => this._fetchMoreLeave(props, fetchMore)}
+              fetchMoreData={props =>
+                this._fetchMoreLeave(props, fetchMore, data)
+              }
             />
           )
         }}
