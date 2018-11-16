@@ -16,8 +16,6 @@ class HomePage extends Component {
   }
 }
 
-// export default HomePage
-
 export default compose(
   withRouter,
   withApollo

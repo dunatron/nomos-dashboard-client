@@ -1,0 +1,28 @@
+query searchQuestions($search: String) {
+  searchQuestions(search: $search) {
+    id
+    name
+    answers {
+      id
+      response
+      notes {
+        id
+        content
+      }
+      links {
+        id
+        name
+        url
+      }
+    }
+    notes {
+      id
+      content
+    }
+    links {
+      id
+      name
+      url
+    }
+  }
+}

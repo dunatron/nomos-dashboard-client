@@ -1,0 +1,19 @@
+mutation createQuestion($data: QuestionCreateInput) {
+  createQuestion(data: $data) {
+    id
+    name
+    answers {
+      id
+      response
+    }
+    notes {
+      id
+      content
+    }
+    links {
+      id
+      name
+      url
+    }
+  }
+}
