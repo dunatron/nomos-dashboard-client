@@ -4,28 +4,45 @@ import { withStyles } from "@material-ui/core/styles"
 import { graphql, withApollo, compose } from "react-apollo"
 // Mutations
 import { CREATE_STOCK_QUESTION } from "../../mutations/CreateQuestion.graphql"
-
+// components
+import Button from "@material-ui/core/Button"
+import TextField from "@material-ui/core/TextField"
+import Typography from "@material-ui/core/Typography"
+// icons
+import AddIcon from "@material-ui/icons/Add"
 const styles = theme => ({
-  root: {},
+  root: {
+    maxWidth: 800,
+    marginRight: "auto",
+    marginLeft: "auto",
+  },
+  heading: { fontSize: 18, color: theme.palette.primary.main },
+  questionInput: {
+    width: "100%",
+  },
 })
 
 class CreateQuestion extends Component {
-  state = {
-    creating: false,
-    name: "",
-    answers: {
-      create: [],
-      connect: [],
-    },
-    notes: {
-      create: [],
-      connect: [],
-    },
-    links: {
-      create: [],
-      connect: [],
-    },
+  defaultState = () => {
+    const defaultState = {
+      creating: false,
+      name: "",
+      answers: {
+        create: [],
+        connect: [],
+      },
+      notes: {
+        create: [],
+        connect: [],
+      },
+      links: {
+        create: [],
+        connect: [],
+      },
+    }
+    return defaultState
   }
+  state = this.defaultState()
 
   addQuestionNote = () => {
     const createNotes = this.state.notes.create
@@ -97,8 +114,7 @@ class CreateQuestion extends Component {
     return questions.map((question, questionIdx) => {
       return (
         <div>
-          content
-          <input
+          <TextField
             placeholder="New Question Note"
             value={question.content}
             onChange={e => this.changeQuestionNote(e.target.value, questionIdx)}
@@ -112,16 +128,14 @@ class CreateQuestion extends Component {
     return links.map((link, linkIdx) => {
       return (
         <div>
-          name
-          <input
+          <TextField
             placeholder="New Link Name"
             value={link.name}
             onChange={e =>
               this.changeQuestionLink("name", e.target.value, linkIdx)
             }
           />
-          url
-          <input
+          <TextField
             placeholder="New Link URL"
             value={link.url}
             onChange={e =>
@@ -137,8 +151,7 @@ class CreateQuestion extends Component {
     return answers.map((answer, answerIdx) => {
       return (
         <div>
-          response
-          <input
+          <TextField
             placeholder="New Answer"
             value={answer.response}
             onChange={e => this.changeAnswer(e.target.value, answerIdx)}
@@ -150,34 +163,55 @@ class CreateQuestion extends Component {
 
   render() {
     const { creating, name, answers, notes, links } = this.state
+    const { classes } = this.props
     return (
-      <div>
-        <h1>Create Question Page</h1>
-        <input
-          placeholder="Question being asked"
+      <div className={classes.root}>
+        <TextField
+          id="create-stock-question-input"
+          label="New Stock Question"
+          className={classes.questionInput}
           value={this.state.name}
+          multiline
           onChange={e =>
             this.setState({
               name: e.target.value,
             })
           }
+          margin="normal"
         />
-        <h2>Question Answers</h2>
+        <Typography className={classes.heading}>Answers</Typography>
         {answers.create ? this.renderNewAnswers(answers.create) : null}
-        <button onClick={() => this.addAnswer()}>New Answer</button>
-
-        <h2>Question Notes</h2>
-        <button onClick={() => this.addQuestionNote()}>New Note</button>
+        <Button color="secondary" size="small" onClick={() => this.addAnswer()}>
+          <AddIcon /> New Answer
+        </Button>
+        <Typography className={classes.heading}>Notes</Typography>
+        <Button
+          color="secondary"
+          size="small"
+          onClick={() => this.addQuestionNote()}>
+          <AddIcon />
+          New Note
+        </Button>
         {notes.create ? this.renderNewQuestionNotes(notes.create) : null}
-        <h2>Question Links</h2>
-        <button onClick={() => this.addQuestionLink()}>New Link</button>
+        <Typography className={classes.heading}>Links</Typography>
+        <Button
+          color="secondary"
+          size="small"
+          onClick={() => this.addQuestionLink()}>
+          <AddIcon />
+          New Link
+        </Button>
         {links.create ? this.renderNewQuestionLinks(links.create) : null}
+        <hr />
         {creating ? (
           "Creating Question"
         ) : (
-          <button onClick={() => this._createQuestion()}>
-            SUbmit New Questio/Answers
-          </button>
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={() => this._createQuestion()}>
+            Submit New Question/Answers
+          </Button>
         )}
       </div>
     )
@@ -202,10 +236,12 @@ class CreateQuestion extends Component {
     } catch (e) {
       alert(e)
     } finally {
-      this.setState({
-        creating: false,
-      })
+      this.clearComponent()
     }
+  }
+
+  clearComponent() {
+    this.setState(this.defaultState())
   }
 }
 

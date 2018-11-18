@@ -9,6 +9,10 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
 const styles = theme => ({
   root: {},
+  question: {
+    fontSize: 18,
+    color: theme.palette.primary.main,
+  },
   answersList: {
     padding: 20,
   },
@@ -23,7 +27,7 @@ class SearchResult extends Component {
     console.log("result => ", this.props)
     return (
       <div>
-        <h2>{name}</h2>
+        <h2 className={classes.question}>{name}</h2>
         <div className={classes.root}>
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>

@@ -9,13 +9,14 @@ const styles = theme => ({
   },
 })
 
-const TextInput = ({ id, label, classes, value, handleChange }) => {
+const TextInput = ({ id, label, classes, value, handleChange, multiline }) => {
   return (
     <TextField
       id={id}
       label={label}
       className={classes.searchField}
       value={value}
+      multiline
       onChange={e => handleChange(e.target.value)}
       margin="normal"
     />
