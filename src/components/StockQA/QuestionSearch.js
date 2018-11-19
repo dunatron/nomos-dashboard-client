@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/core/styles"
 import { graphql, withApollo, compose } from "react-apollo"
-import { Search } from "@material-ui/icons"
+// import { Search } from "@material-ui/icons"
 import Button from "@material-ui/core/Button"
 // queries
 import { SEARCH_STOCK_QUESTIONS } from "../../queries/SearchQuestions.graphql"
@@ -13,8 +13,11 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"
 import Typography from "@material-ui/core/Typography"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import Search from "./Search"
+import ResultsList from "./ResultsList"
 import SearchResult from "./SearchResult"
 import SelectOption from "../Inputs/SelectOption"
+import { Column, Table, AutoSizer, List } from "react-virtualized"
 
 const searchOptionTypes = [
   { name: "FullText", value: SEARCH_STOCK_QUESTIONS_FULL_TEXT },
@@ -35,9 +38,6 @@ const styles = theme => ({
     outline: "0 0 5px rgba(81, 203, 238, 1)",
     padding: theme.spacing.unit * 3,
     color: theme.palette.primary.main,
-    // ":focus": {
-    //   "box-shadow": "0 0 5px rgba(81, 203, 238, 1)",
-    // },
     "&:focus": {
       outline: `2px solid ${theme.palette.secondary.main}`,
       border: "none",
@@ -54,34 +54,16 @@ const styles = theme => ({
 class QuestionSearch extends Component {
   state = {
     search: "",
+    searching: false,
     searchType: SEARCH_STOCK_QUESTIONS_FULL_TEXT,
     questions: [],
   }
   render() {
-    const { searchType, search, questions } = this.state
+    const { searchType, search, searching, questions } = this.state
     const { classes } = this.props
     return (
       <div>
-        <div className={classes.searchBar}>
-          <input
-            placeholder="search stock questions"
-            className={classes.searchBox}
-            value={search}
-            onChange={e =>
-              this.setState({
-                search: e.target.value,
-              })
-            }
-          />
-          <Button
-            onClick={() => this._searchQuestions(this.state.search)}
-            variant="outlined"
-            color="secondary"
-            className={classes.searchBtn}>
-            <Search />
-            Search
-          </Button>
-        </div>
+        <Search executeSearch={searchVal => this._searchQuestions(searchVal)} />
         <ExpansionPanel>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}>Search Options</Typography>
@@ -99,15 +81,15 @@ class QuestionSearch extends Component {
           </ExpansionPanelDetails>
         </ExpansionPanel>
 
-        {questions &&
-          questions.map((question, questionIdx) => (
-            <SearchResult key={questionIdx} question={question} />
-          ))}
+        {searching ? "Searching" : <ResultsList results={questions} />}
       </div>
     )
   }
 
   _searchQuestions = async search => {
+    this.setState({
+      searching: true,
+    })
     const questions = await this.props.client.query({
       query: this.state.searchType,
       variables: {
@@ -118,14 +100,16 @@ class QuestionSearch extends Component {
       this.setState({
         questions: questions.data.questionsFullTextSearch,
       })
-      return
     }
     if (this.state.searchType === SEARCH_STOCK_QUESTIONS) {
       this.setState({
         questions: questions.data.searchQuestions,
       })
-      return
     }
+    this.setState({
+      searching: false,
+    })
+    return
   }
 }
 

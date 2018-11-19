@@ -12,7 +12,11 @@ const styles = theme => ({
     marginLeft: "auto",
   },
   actionBar: {
-    margin: `${theme.spacing.unit * 2}px 0`,
+    // margin: `${theme.spacing.unit * 2}px 0`,
+  },
+  button: {
+    // margin: theme.spacing.unit * 2,
+    margin: `${theme.spacing.unit * 2}px ${theme.spacing.unit}px`,
   },
 })
 class StockQAPage extends Component {
@@ -25,11 +29,18 @@ class StockQAPage extends Component {
       <div className={classes.root}>
         <div className={classes.actionBar}>
           <Button
+            className={classes.button}
             onClick={() => this.handlePageChange("/stock-qa/create-question")}
             variant="outlined"
-            color="secondary"
-            className={classes.searchBtn}>
+            color="secondary">
             Create Question
+          </Button>
+          <Button
+            className={classes.button}
+            onClick={() => this.handlePageChange("/stock-qa/all-questions")}
+            variant="outlined"
+            color="secondary">
+            All Questions
           </Button>
         </div>
 

@@ -16,6 +16,9 @@ const styles = theme => ({
   answersList: {
     padding: 20,
   },
+  amount: {
+    color: theme.palette.secondary.main,
+  },
 })
 
 class SearchResult extends Component {
@@ -32,50 +35,66 @@ class SearchResult extends Component {
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography className={classes.heading}>
-                Answers ({answers.length})
+                Answers{" "}
+                <span className={classes.amount}>({answers.length})</span>
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              {answers &&
-                answers.map((answer, answerIdx) => {
-                  return (
-                    <Typography key={answerIdx}>{answer.response}</Typography>
-                  )
-                })}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <ExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>
-                Notes ({notes.length})
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              {notes
-                ? notes.map((note, noteIdx) => {
-                    return <div key={noteIdx}>{note.content}</div>
-                  })
-                : "No Notes"}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <ExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>
-                Links ({links.length})
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              {links
-                ? links.map((link, linkIdx) => {
+              {answers && (
+                <ul>
+                  {answers.map((answer, answerIdx) => {
                     return (
-                      <div key={linkIdx}>
+                      <li>
+                        <Typography key={answerIdx}>
+                          {answer.response}
+                        </Typography>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography className={classes.heading}>
+                Notes <span className={classes.amount}>({notes.length})</span>
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              {notes.length >= 1 ? (
+                <ul>
+                  {notes.map((note, noteIdx) => {
+                    return <li key={noteIdx}>{note.content}</li>
+                  })}
+                </ul>
+              ) : (
+                "No Notes"
+              )}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography className={classes.heading}>
+                Links <span className={classes.amount}>({links.length})</span>
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              {links.length >= 1 ? (
+                <div>
+                  {links.map((link, linkIdx) => {
+                    return (
+                      <li key={linkIdx}>
                         <a target="__blank" href={link.url}>
                           {link.name}
                         </a>
-                      </div>
+                      </li>
                     )
-                  })
-                : "No Notes"}
+                  })}
+                </div>
+              ) : (
+                "No Links"
+              )}
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </div>
