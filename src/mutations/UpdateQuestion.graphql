@@ -1,0 +1,19 @@
+mutation updateQuestion($id: ID!, $data: QuestionUpdateInput!) {
+  updateQuestion(id: $id, data: $data) {
+    id
+    name
+    answers {
+      id
+      response
+    }
+    notes {
+      id
+      content
+    }
+    links {
+      id
+      name
+      url
+    }
+  }
+}

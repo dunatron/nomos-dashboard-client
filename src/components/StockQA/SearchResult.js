@@ -27,7 +27,7 @@ class SearchResult extends Component {
       classes,
       question: { name, answers, links, notes },
     } = this.props
-    console.log("result => ", this.props)
+
     return (
       <div>
         <h2 className={classes.question}>{name}</h2>

@@ -201,7 +201,6 @@ class LeaveList extends Component {
   }
 
   acceptLeave = async ({ id }) => {
-    console.log("trying to accept leave")
     const acceptedLeave = await this.props.acceptLeave({
       variables: {
         id: id,
@@ -211,27 +210,10 @@ class LeaveList extends Component {
     const leaveData = this.props.store.readQuery({
       ALL_LEAVE,
     })
-    console.log("Our Leave Data => ", leaveData)
-
-    // // const data = store.readQuery({
-    // //   query: FEED_QUERY,
-    // //   variables: { first, skip, orderBy },
-    // // })
-
-    // // const votedSample = data.feed.samples.find(sample => sample.id === sampleId)
-    // // votedSample.votes = createVote.sample.votes
-    // // store.writeQuery({ query: FEED_QUERY, data })
-    // acceptedLeave.then(res => {
-    //   console.log("Our result to update the cache with => ", res)
-
-    // })
-    console.log("acceptedLeave returned Obj => ", acceptedLeave)
     alert("Accept leave")
-    // 1. create an acceptLeave mutation. it will accept an id, and send email, update status
   }
 
   executeFunctionByName = (functionName, dataObj /*, args */) => {
-    console.log("The dataObj ", dataObj)
     switch (functionName) {
       case "acceptLeave":
         this.acceptLeave(dataObj)
@@ -252,7 +234,6 @@ class LeaveList extends Component {
       classes,
       allLeave: { loading, error, getAllLeave, fetchMore },
     } = this.props
-    console.log("The props of the leave list => ", this.props)
 
     if (loading) {
       return "Loading the leave list"
@@ -275,7 +256,6 @@ class LeaveList extends Component {
         />
         {getAllLeave &&
           getAllLeave.map(leave => {
-            console.log("Al leave item => ", leave)
             return this.renderLeaveItem(leave)
           })}
       </div>

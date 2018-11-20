@@ -32,7 +32,7 @@ class Week extends Component {
   }
 
   render() {
-    console.log("week render")
+
     const { classes, WeekNumber, date, month } = this.props
 
     let daysInMonth = month.daysInMonth()

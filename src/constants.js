@@ -1,5 +1,6 @@
 export const AUTH_TOKEN = "auth-token"
 export const PERSISTENT_STORE_KEYS_ARR = ["user"]
+export const QUESTIONS_PER_PAGE = 25
 
 // ROLES
 export const ROLE_WIZARD = { name: "Wizard", value: "WIZARD" }
@@ -89,4 +90,58 @@ export const NOMOS_LEAVE_TYPES = [
 export const LEAVE_TYPE_OPTIONS = NOMOS_LEAVE_TYPES.map(r => ({
   name: r.name,
   value: r.value,
+}))
+
+// Question Order By Input
+// const QuestionOrderByInput = [
+//   name:
+// ]
+
+const ID_ASC = {
+  name: "id_ASC",
+  value: "id_ASC",
+}
+const ID_DESC = {
+  name: "id_DESC",
+  value: "id_DESC",
+}
+const NAME_ASC = {
+  name: "name_ASC",
+  value: "name_ASC",
+}
+const NAME_DESC = {
+  name: "name_DESC",
+  value: "name_DESC",
+}
+const UPDATED_AT_ASC = {
+  name: "updatedAt_ASC",
+  value: "updatedAt_ASC",
+}
+const UPDATED_AT_DESC = {
+  name: "updatedAt_DESC",
+  value: "updatedAt_DESC",
+}
+const CREATED_AT_ASC = {
+  name: "createdAt_ASC",
+  value: "createdAt_ASC",
+}
+const CREATED_AT_DESC = {
+  name: "createdAt_DESC",
+  value: "createdAt_DESC",
+}
+
+export const QUESTION_ORDER_BY_INPUT = [
+  ID_ASC,
+  ID_DESC,
+  NAME_ASC,
+  NAME_DESC,
+  UPDATED_AT_ASC,
+  UPDATED_AT_DESC,
+  CREATED_AT_ASC,
+  CREATED_AT_DESC,
+]
+
+export const QUESTION_ORDER_BY_INPUT_OPTIONS = NOMOS_LEAVE_TYPES.map(o => ({
+  name: o.name,
+  value: o.value,
 }))

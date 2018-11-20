@@ -1,0 +1,31 @@
+query questionFeed(
+  $filter: String
+  $skip: Int
+  $first: Int
+  $orderBy: QuestionOrderByInput
+) {
+  questionFeed(filter: $filter, skip: $skip, first: $first, orderBy: $orderBy) {
+    count
+    questions {
+      id
+      name
+      answers {
+        id
+        response
+      }
+      links {
+        id
+        name
+        url
+      }
+      notes {
+        id
+        content
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+}

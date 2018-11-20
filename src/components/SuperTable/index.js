@@ -241,15 +241,7 @@ const styles = theme => ({
 })
 
 const extractDeepValue = (str, dataObj) => {
-  // cellHeader.found
-  //                                     .split(".")
-  //                                     .reduce((o, i) => o[i], n)
-
-  console.log("EXTRACT DEEP STR ", str)
-  console.log("EXTRACT DEEP dataObj ", dataObj)
-
   const value = str.split(".").reduce((o, i) => o[i], dataObj)
-
   return value ? value : ""
 }
 
@@ -281,9 +273,6 @@ class SuperTable extends React.Component {
       (ac, column) => ({ ...ac, [column.id]: column.show }),
       {}
     )
-
-    console.log("========displayColumns========== ", displayColumns)
-
     this.state = {
       order: "asc",
       orderBy: "calories",
@@ -390,20 +379,13 @@ class SuperTable extends React.Component {
   }
 
   filterData = (data, searchCol, searchVal) => {
-    console.group("filterData")
-    console.log("data => ", data)
-    console.log("searchCol => ", searchCol)
-    console.log("searchVal => ", searchVal)
-
     const searchParts = split(".", searchCol)
-    console.log("searchParts => ", searchParts)
     const filteredData = data.filter(n =>
       path(searchParts, n)
         .toString()
         .toLowerCase()
         .includes(searchVal.toLowerCase())
     )
-    console.groupEnd()
     return filteredData
   }
 
@@ -509,18 +491,9 @@ class SuperTable extends React.Component {
                                         n
                                       )
                                     }>
-                                    BUTTON
                                     {cellHeader.icon}
                                   </div>
                                 </TableCell>
-                              )
-                            }
-                            if (cellHeader.type === "btn") {
-                              return (
-                                <div>
-                                  BUTTON
-                                  {cellHeader.icon}
-                                </div>
                               )
                             }
 
