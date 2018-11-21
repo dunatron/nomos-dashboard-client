@@ -3,40 +3,13 @@ import { graphql, compose, withApollo, Query } from "react-apollo"
 import { QUESTIONS_PER_PAGE } from "../../constants"
 
 // Queries
+import { ALL_TAGS } from "../../queries/AllTags.graphql"
 import { QUESTION_FEED } from "../../queries/QuestionFeed.graphql"
 // Components
 import SuperTable from "../SuperTable/index"
 import Button from "@material-ui/core/Button"
 import Modal from "../Modal/index"
 import EditableQuestionCard from "./EditableQuestionCard"
-
-const COLUMN_HEADERS = [
-  {
-    id: "name",
-    numeric: false,
-    disablePadding: true,
-    label: "name",
-    show: true,
-    tableRenderKey: "th",
-    found: "name",
-  },
-  {
-    id: "showDetails", //votes.id
-    numeric: false,
-    disablePadding: true,
-    label: "Show Details",
-    show: true,
-    type: "btnFunc",
-    icon: (
-      <Button color="primary" aria-label="Add to shopping cart">
-        Show Details
-      </Button>
-    ),
-    funcName: "showDetails",
-    found: "votes",
-    tableRenderKey: "th",
-  },
-]
 
 class AllQuestionsList extends Component {
   state = {
@@ -52,7 +25,6 @@ class AllQuestionsList extends Component {
   }
 
   _fetchMore = (fetchMore, currCount) => {
-    console.log("attempting to fetch more")
     fetchMore({
       variables: {
         skip: currCount + 1,
@@ -60,16 +32,7 @@ class AllQuestionsList extends Component {
         orderBy: "createdAt_DESC",
       },
       updateQuery: (prev, { fetchMoreResult }) => {
-        console.log("fetchMoreResult => ", fetchMoreResult)
-        console.log("prev => ", prev)
         if (!fetchMoreResult) return prev
-        // return Object.assign({}, prev, {
-        //   questionFeed: [
-        //     count: prev.questionFeed.count,
-        //     ...prev.questionFeed.questions,
-        //     ...fetchMoreResult.questionFeed.questions,
-        //   ],
-        // })
         return Object.assign({}, prev, {
           questionFeed: {
             count: fetchMoreResult.questionFeed.count,
@@ -86,8 +49,6 @@ class AllQuestionsList extends Component {
   }
 
   showDetails = dataObj => {
-    console.log("showDetails => dataObj => ", dataObj)
-
     this.setState({
       modalDetailsObj: dataObj,
     })
@@ -116,8 +77,59 @@ class AllQuestionsList extends Component {
     )
   }
 
+  columnHeaders = () => {
+    return [
+      {
+        id: "name",
+        numeric: false,
+        disablePadding: true,
+        label: "name",
+        show: true,
+        tableRenderKey: "th",
+        found: "name",
+        searchable: true,
+      },
+      // {
+      //   id: "tags",
+      //   label: "More Tags",
+      //   show: true,
+      //   type: "map",
+      //   mapKeys: ['name'],
+      //   found: "tags",
+      // },
+      {
+        id: "tags",
+        label: "More Tags",
+        show: true,
+        type: "tag",
+        tagKey: "name",
+        found: "tags",
+      },
+      {
+        id: "showDetails", //votes.id
+        numeric: false,
+        disablePadding: true,
+        label: "Show Details",
+        show: true,
+        type: "deep",
+        icon: (
+          <Button color="primary" aria-label="Add to shopping cart">
+            Show Details
+          </Button>
+        ),
+        funcName: "showDetails",
+        found: "votes",
+        tableRenderKey: "th",
+      },
+    ]
+  }
+
   render() {
     const { modalIsOpen, modalDetailsObj } = this.state
+    const {
+      data: { loading, error, allTags },
+    } = this.props
+    console.log("=======this.props.data======== ", this.props.data)
     return (
       <Query query={QUESTION_FEED} variables={this._getQueryVariables()}>
         {({ loading, error, data, subscribeToMore, fetchMore }) => {
@@ -160,7 +172,14 @@ class AllQuestionsList extends Component {
               ) : null}
               <div>
                 <SuperTable
-                  columnHeaders={COLUMN_HEADERS}
+                  columnHeaders={this.columnHeaders()}
+                  tags={{
+                    found: "tags",
+                    key: "id",
+                    options: allTags
+                      ? allTags.map(t => ({ name: t.name, value: t.id }))
+                      : [],
+                  }}
                   title="Table of Stock questions"
                   data={questions}
                   executeFunc={(funcName, obj) => {
@@ -187,6 +206,9 @@ class AllQuestionsList extends Component {
   }
 }
 
-// export default AllQuestionsList
+// export default compose(withApollo)(AllQuestionsList)
 
-export default compose(withApollo)(AllQuestionsList)
+export default compose(
+  graphql(ALL_TAGS),
+  withApollo
+)(AllQuestionsList)

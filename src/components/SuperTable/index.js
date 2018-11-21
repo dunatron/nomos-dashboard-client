@@ -24,6 +24,7 @@ import SearchFilter from "../Inputs/SearchFilter"
 import SelectOption from "../Inputs/SelectOption"
 import SearchBar from "./SearchBar"
 import FilterBar from "./FilterBar"
+import TagBar from "./TagBar.js"
 import MultiSelect from "../Inputs/MultiSelect"
 import { split, path } from "ramda"
 
@@ -284,6 +285,12 @@ class SuperTable extends React.Component {
       filterProps: { ...displayColumns }, // Ok when we click on filter Icon the FilterBar will update the state here
       stateData: propData,
       columnHeaders: propColumnHeaders,
+      searchHeaders: propColumnHeaders.filter(
+        confObj => confObj.searchable === true
+      ),
+      // tagHeaders: propColumnHeaders.filter(confObj => confObj.type === "tag"),
+      tags: props.tags ? props.tags.options : [],
+      appliedTags: [],
       page: 0,
       rowsPerPage: 5,
     }
@@ -395,6 +402,25 @@ class SuperTable extends React.Component {
     return filteredData
   }
 
+  filterDataByTags = (data, tags, found, key) => {
+    if (tags.length < 1) {
+      return data
+    }
+    // const filteredData = data.filter(o => {
+    //   // if (o[found].filter(t => tags.includes(t[key])).length >= 1) {
+    //   //   return true
+    //   // }
+    //   if (o[found].filter(t => tags.includes(t[key])).length === tags.length) {
+    //     return true
+    //   }
+    //   return false
+    // })
+    const filteredData = data.filter(
+      o => o[found].filter(t => tags.includes(t[key])).length === tags.length
+    ) // can change tags.length to >= 1 to get a contains
+    return filteredData
+  }
+
   isSelected = id => this.state.selected.indexOf(id) !== -1
 
   toggleBoolean = name =>
@@ -427,12 +453,24 @@ class SuperTable extends React.Component {
         ? this.filterData(data, searchCol, searchValue)
         : data
 
+    processedData = this.filterDataByTags(
+      processedData,
+      this.state.appliedTags,
+      this.props.tags.found,
+      this.props.tags.key
+    )
+
     return (
       <Paper square={true} className={classes.root}>
+        <TagBar
+          values={this.state.appliedTags}
+          options={this.state.tags}
+          updateTags={values => this.setState({ appliedTags: values })}
+        />
         <EnhancedTableToolbar
           title={title}
           numSelected={selected.length}
-          columnHeaders={this.state.columnHeaders}
+          columnHeaders={this.state.searchHeaders}
           searchOpen={searchOpen}
           toggleSearch={() => this.toggleBoolean("searchOpen")}
           searchCol={this.state.searchCol}
@@ -552,6 +590,62 @@ class SuperTable extends React.Component {
                                 </TableCell>
                               )
                             }
+                            if (cellHeader.type === "map") {
+                              return (
+                                <TableCell
+                                  key={idx}
+                                  numeric={cellHeader.numeric}
+                                  style={{ minWidth: "90px" }}
+                                  component={cellHeader.tableRenderKey}
+                                  padding={idx === 0 ? "dense" : "dense"}
+                                  {...cellHeader.tableRenderProps}>
+                                  <CellContent
+                                    content={extractDeepValue(
+                                      cellHeader.found,
+                                      n
+                                    ).map((o, oIdx) => {
+                                      return (
+                                        <span key={oIdx}>
+                                          {cellHeader.mapKeys.map(
+                                            (cK, ckIdx) => {
+                                              return (
+                                                <span key={ckIdx}>
+                                                  {o[cK]},
+                                                </span>
+                                              )
+                                            }
+                                          )}
+                                        </span>
+                                      )
+                                    })}
+                                    limitChar={cellHeader.limitChar}
+                                  />
+
+                                  {/* <CellContent content={"I will be tags"} /> */}
+                                </TableCell>
+                              )
+                            }
+                            if (cellHeader.type === "tag") {
+                              return (
+                                <TableCell
+                                  key={idx}
+                                  numeric={cellHeader.numeric}
+                                  style={{ minWidth: "90px" }}
+                                  component={cellHeader.tableRenderKey}
+                                  padding={idx === 0 ? "dense" : "dense"}
+                                  {...cellHeader.tableRenderProps}>
+                                  {extractDeepValue(cellHeader.found, n).map(
+                                    (o, oIdx) => {
+                                      return (
+                                        <span key={oIdx}>
+                                          {o[cellHeader.tagKey]}
+                                        </span>
+                                      )
+                                    }
+                                  )}
+                                </TableCell>
+                              )
+                            }
                             return (
                               <TableCell
                                 key={idx}
@@ -580,7 +674,7 @@ class SuperTable extends React.Component {
         </div>
         <TablePagination
           component="div"
-          count={data.length}
+          count={processedData.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{

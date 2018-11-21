@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/core/styles"
 import { graphql, withApollo, compose } from "react-apollo"
+// Queries
+import { ALL_TAGS } from "../../queries/AllTags.graphql"
 // Mutations
 import { CREATE_STOCK_QUESTION } from "../../mutations/CreateQuestion.graphql"
 // components
@@ -178,12 +180,13 @@ class CreateQuestion extends Component {
 
   render() {
     const { creating, name, answers, notes, links, tags } = this.state
-    const { classes } = this.props
-    const tagOptions = [
-      { name: "Tag 1", value: "cjoorrsxjplzq0a64egbhblx4" },
-      { name: "Tag 2", value: "cjoqa6qbjwmp50a64lneca5j4" },
-      { name: "Tag 3", value: "cjoqb1en5wq9q0a64tcj76hyk" },
-    ]
+    const {
+      classes,
+      data: { loading, error, allTags },
+    } = this.props
+    const tagOptions = allTags
+      ? allTags.map(t => ({ name: t.name, value: t.id }))
+      : []
     const tagValues = tags.connect.map(tag => tag.id)
     return (
       <div className={classes.root}>
@@ -279,6 +282,7 @@ CreateQuestion.propTypes = {
 
 export default compose(
   withStyles(styles),
+  graphql(ALL_TAGS),
   graphql(CREATE_STOCK_QUESTION, { name: "createStockQuestion" }),
   withApollo
 )(CreateQuestion)
