@@ -15,5 +15,9 @@ mutation createQuestion($data: QuestionCreateInput) {
       name
       url
     }
+    tags {
+      id
+      name
+    }
   }
 }

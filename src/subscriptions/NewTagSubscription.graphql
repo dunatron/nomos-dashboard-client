@@ -1,0 +1,8 @@
+subscription {
+  newTag {
+    node {
+      id
+      name
+    }
+  }
+}

@@ -37,6 +37,13 @@ class StockQAPage extends Component {
           </Button>
           <Button
             className={classes.button}
+            onClick={() => this.handlePageChange("/stock-qa/create-tag")}
+            variant="outlined"
+            color="secondary">
+            Create Tag
+          </Button>
+          <Button
+            className={classes.button}
             onClick={() => this.handlePageChange("/stock-qa/all-questions")}
             variant="outlined"
             color="secondary">

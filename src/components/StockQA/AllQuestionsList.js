@@ -159,7 +159,6 @@ class AllQuestionsList extends Component {
                 </Modal>
               ) : null}
               <div>
-                <h1>A leave feed should be in the network tab</h1>
                 <SuperTable
                   columnHeaders={COLUMN_HEADERS}
                   title="Table of Stock questions"

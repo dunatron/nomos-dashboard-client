@@ -2,6 +2,7 @@ import React from "react"
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle"
 // components
 import CreateQuestion from "../components/StockQA/CreateQuestion"
+import CreateTag from "../components/StockQA/CreateTag"
 // ToDo: Create container or component for the AllQuestionsList
 import AllQuestionsList from "../components/StockQA/AllQuestionsList"
 
@@ -22,6 +23,15 @@ const wizardRoutes = [
     main: true,
     restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
     component: CreateQuestion,
+  },
+  {
+    title: "Create Tag",
+    path: "/stock-qa/create-tag",
+    icon: <SupervisedUserCircleIcon color="primary" style={styles.icon} />,
+    panel: true,
+    main: true,
+    restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
+    component: CreateTag,
   },
   {
     title: "All Stock Questions",

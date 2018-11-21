@@ -42,39 +42,24 @@ class EditableQuestionCard extends Component {
     this.state = {
       editing: false,
       canUpdate: false,
+      id: props.question.id,
       name: props.question.name,
       answers: {
-        // update: [
-        //   // map over answers here
-        //   {
-        //     where: {
-        //       id: "answerID",
-        //       data: {
-        //         response: "Here is the answer",
-        //       },
-        //     },
-        //     create: [],
-        //   },
-        // ],
         update: props.question.answers.map((answer, aIdx) => {
           return {
             where: {
               id: answer.id,
-              data: {
-                response: answer.response,
-              },
+            },
+            data: {
+              response: answer.response,
             },
           }
         }),
+        create: [],
       },
     }
   }
   componentDidUpdate(prevProps, prevState) {
-    // if (prevProps !== this.props) {
-    //   alert("Ummmm Our props have changed?")
-    // }
-    console.log("prevState => ", prevState)
-    console.log("this.state => ", this.state)
     if (prevState !== this.state && this.state.canUpdate === false) {
       this.setState({
         canUpdate: true,
@@ -83,20 +68,13 @@ class EditableQuestionCard extends Component {
   }
 
   _update = async () => {
-    alert("_update")
-    console.log("this.state.name => ", this.state.name)
-    console.log("this.props.question.name => ", this.props.question.name)
-    if (this.state.name !== this.props.question.name) {
-      alert("The name should update")
-    }
-
     try {
       const res = await this.props.updateStockQuestion({
         variables: {
           id: this.state.id,
           data: {
             name: this.state.name,
-            // answers: this.state.answers,
+            answers: { ...this.state.answers },
             // notes: this.state.notes,
             // links: this.state.links,
           },
@@ -107,6 +85,9 @@ class EditableQuestionCard extends Component {
       alert(e)
     } finally {
       // this.clearComponent()
+      this.setState({
+        canUpdate: false,
+      })
     }
   }
 
@@ -145,31 +126,14 @@ class EditableQuestionCard extends Component {
           onChange={() => this.toggleEditing(!this.state.editing)}
           checked={this.state.editing}
         />
-        {answers.update.map((answer, aIdx) => {
-          return <div>{answer.where.data.response}</div>
-        })}
-        {this.renderKnownAnswers(answers.update, editing)}
-        {/* <CardContent>
-          <Switch
-            onChange={() => this.toggleEditing(!this.state.editing)}
-            checked={this.state.editing}
-          />
-          {editing ? (
-            <TextField
-              label="Question"
-              multiline
-              value={name}
-              onChange={e => this.updateName(e.target.value)}
-            />
-          ) : (
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom>
-              {name}
-            </Typography>
+
+        <CardContent>
+          {this.renderName(name, editing)}
+          {this.renderKnownAnswers(answers.update, editing)}
+          {this.renderCreateAnswers(answers.create, editing)}
+          {editing && (
+            <Button onClick={() => this.addAnswer()}>Add answer</Button>
           )}
-          {this.renderAnswers(answers, editing)}
         </CardContent>
         <CardActions>
           {canUpdate && (
@@ -177,41 +141,88 @@ class EditableQuestionCard extends Component {
               Update
             </Button>
           )}
-        </CardActions> */}
+        </CardActions>
       </Card>
     )
   }
 
+  renderName = (name, editing) => {
+    const { classes } = this.props
+    if (editing) {
+      return (
+        <TextField
+          label="Question"
+          multiline
+          value={name}
+          onChange={e => this.updateName(e.target.value)}
+        />
+      )
+    }
+    return (
+      <Typography className={classes.title} color="textSecondary" gutterBottom>
+        {name}
+      </Typography>
+    )
+  }
+
+  addAnswer = () => {
+    const answers = this.state.answers
+    answers.create.push({ response: "" })
+    this.setState({
+      answers: answers,
+    })
+  }
+
+  updateKnownAnswer = (val, idx) => {
+    const answers = this.state.answers
+    answers.update[idx].data.response = val
+    this.setState({
+      answers: answers,
+    })
+  }
+
+  updateCreateAnswer = (val, idx) => {
+    const answers = this.state.answers
+    answers.create[idx].response = val
+    this.setState({
+      answers: answers,
+    })
+  }
+
   renderKnownAnswers = (answers, editing) => {
-    return answers.map((answer, answerIdx) => {
+    return answers.map((answer, idx) => {
       if (editing) {
         return (
-          <TextField
-            label={`Answer ${answerIdx + 1}`}
-            multiline
-            value={answer.response}
-            onChange={e => this.updateKnownAnswer(e.target.value, answerIdx)}
-          />
+          <Fragment>
+            <TextField
+              label={`Answer ${idx + 1}`}
+              multiline
+              value={answer.data.response}
+              onChange={e => this.updateKnownAnswer(e.target.value, idx)}
+            />
+          </Fragment>
         )
       }
       return (
         <ul>
-          <li>response{answer.where.data.response}</li>
+          <li>response{answer.data.response}</li>
         </ul>
       )
     })
   }
 
-  renderAnswers = (answers, editing) => {
-    return answers.map((answer, answerIdx) => {
+  renderCreateAnswers = (answers, editing) => {
+    return answers.map((answer, idx) => {
       if (editing) {
         return (
-          <TextField
-            label={`Answer ${answerIdx + 1}`}
-            multiline
-            value={answer.response}
-            onChange={e => this.updateAnswer(e.target.value, answerIdx)}
-          />
+          <Fragment>
+            <TextField
+              label={`Answer ${idx + 1}`}
+              multiline
+              value={answer.response}
+              onChange={e => this.updateCreateAnswer(e.target.value, idx)}
+            />
+          </Fragment>
         )
       }
       return (

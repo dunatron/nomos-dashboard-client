@@ -8,6 +8,8 @@ import { CREATE_STOCK_QUESTION } from "../../mutations/CreateQuestion.graphql"
 import Button from "@material-ui/core/Button"
 import TextField from "@material-ui/core/TextField"
 import Typography from "@material-ui/core/Typography"
+import MultiSelect from "../Inputs/MultiSelect"
+import TagsSelector from "./TagsSelector"
 // icons
 import AddIcon from "@material-ui/icons/Add"
 const styles = theme => ({
@@ -37,6 +39,9 @@ class CreateQuestion extends Component {
       },
       links: {
         create: [],
+        connect: [],
+      },
+      tags: {
         connect: [],
       },
     }
@@ -110,6 +115,16 @@ class CreateQuestion extends Component {
     })
   }
 
+  setTags = valuesArr => {
+    const tags = this.state.tags
+    tags.connect = valuesArr.map(val => {
+      return { id: val }
+    })
+    this.setState({
+      tags: tags,
+    })
+  }
+
   renderNewQuestionNotes = questions => {
     return questions.map((question, questionIdx) => {
       return (
@@ -162,8 +177,14 @@ class CreateQuestion extends Component {
   }
 
   render() {
-    const { creating, name, answers, notes, links } = this.state
+    const { creating, name, answers, notes, links, tags } = this.state
     const { classes } = this.props
+    const tagOptions = [
+      { name: "Tag 1", value: "cjoorrsxjplzq0a64egbhblx4" },
+      { name: "Tag 2", value: "cjoqa6qbjwmp50a64lneca5j4" },
+      { name: "Tag 3", value: "cjoqb1en5wq9q0a64tcj76hyk" },
+    ]
+    const tagValues = tags.connect.map(tag => tag.id)
     return (
       <div className={classes.root}>
         <TextField
@@ -178,6 +199,12 @@ class CreateQuestion extends Component {
             })
           }
           margin="normal"
+        />
+        {/* {TagsSelector()} */}
+        <TagsSelector
+          options={tagOptions}
+          values={tagValues}
+          handleChange={values => this.setTags(values)}
         />
         <Typography className={classes.heading}>Answers</Typography>
         {answers.create ? this.renderNewAnswers(answers.create) : null}
@@ -229,6 +256,7 @@ class CreateQuestion extends Component {
             answers: this.state.answers,
             notes: this.state.notes,
             links: this.state.links,
+            tags: this.state.tags,
           },
         },
       })
