@@ -263,6 +263,24 @@ const CellContent = ({ content, limitChar }) => {
   return content
 }
 
+const filterDataByTags = (data, tags, found, key, filterType) => {
+  if (tags.length < 1) {
+    return data
+  }
+  // const filteredData = data.filter(o => {
+  //   // if (o[found].filter(t => tags.includes(t[key])).length >= 1) {
+  //   //   return true
+  //   // }
+  //   if (o[found].filter(t => tags.includes(t[key])).length === tags.length) {
+  //     return true
+  //   }
+  //   return false
+  // })
+  const filteredData = data.filter(
+    o => o[found].filter(t => tags.includes(t[key])).length
+  ) // can change tags.length to >= 1 to get a contains
+  return filteredData
+}
 class SuperTable extends React.Component {
   constructor(props) {
     super(props)
@@ -402,24 +420,24 @@ class SuperTable extends React.Component {
     return filteredData
   }
 
-  filterDataByTags = (data, tags, found, key) => {
-    if (tags.length < 1) {
-      return data
-    }
-    // const filteredData = data.filter(o => {
-    //   // if (o[found].filter(t => tags.includes(t[key])).length >= 1) {
-    //   //   return true
-    //   // }
-    //   if (o[found].filter(t => tags.includes(t[key])).length === tags.length) {
-    //     return true
-    //   }
-    //   return false
-    // })
-    const filteredData = data.filter(
-      o => o[found].filter(t => tags.includes(t[key])).length === tags.length
-    ) // can change tags.length to >= 1 to get a contains
-    return filteredData
-  }
+  // filterDataByTags = (data, tags, found, key, filterType) => {
+  //   if (tags.length < 1) {
+  //     return data
+  //   }
+  //   // const filteredData = data.filter(o => {
+  //   //   // if (o[found].filter(t => tags.includes(t[key])).length >= 1) {
+  //   //   //   return true
+  //   //   // }
+  //   //   if (o[found].filter(t => tags.includes(t[key])).length === tags.length) {
+  //   //     return true
+  //   //   }
+  //   //   return false
+  //   // })
+  //   const filteredData = data.filter(
+  //     o => o[found].filter(t => tags.includes(t[key])).length === filterType === "match" ? tags.length : >=1
+  //   ) // can change tags.length to >= 1 to get a contains
+  //   return filteredData
+  // }
 
   isSelected = id => this.state.selected.indexOf(id) !== -1
 
@@ -453,7 +471,7 @@ class SuperTable extends React.Component {
         ? this.filterData(data, searchCol, searchValue)
         : data
 
-    processedData = this.filterDataByTags(
+    processedData = filterDataByTags(
       processedData,
       this.state.appliedTags,
       this.props.tags.found,
