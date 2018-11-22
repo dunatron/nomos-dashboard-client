@@ -36,6 +36,7 @@ const COLUMN_HEADERS = [
     show: true,
     tableRenderKey: "th",
     found: "name",
+    searchable: true,
   },
 ]
 
@@ -133,6 +134,13 @@ class CreateTag extends Component {
                 executeFunc={(funcName, obj) => {
                   this.executeFunctionByName(funcName, obj)
                 }}
+                // tags={{
+                //   found: "tags",
+                //   key: "id",
+                //   options: data.allTags
+                //     ? data.allTags.map(t => ({ name: t.name, value: t.id }))
+                //     : [],
+                // }}
               />
             )
           }}

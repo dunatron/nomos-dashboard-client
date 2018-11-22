@@ -110,7 +110,7 @@ class CreateQuestion extends Component {
     const createLinks = this.state.links.create
     createLinks[idx][variableName] = v
     this.setState({
-      notes: {
+      links: {
         ...this.state.links,
         create: createLinks,
       },

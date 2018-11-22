@@ -197,7 +197,6 @@ let EnhancedTableToolbar = props => {
         </div>
       </Toolbar>
       <Toolbar className={classes.barHolder}>
-
         <FilterBar
           open={searchOpen}
           columnHeaders={columnHeaders}
@@ -508,13 +507,15 @@ class SuperTable extends React.Component {
         ? this.filterData(data, searchCol, searchValue)
         : data
 
-    processedData = filterDataByTags(
-      processedData,
-      this.state.appliedTags,
-      this.props.tags.found,
-      this.props.tags.key,
-      tagType
-    )
+    if (this.props.tags) {
+      processedData = filterDataByTags(
+        processedData,
+        this.state.appliedTags,
+        this.props.tags.found,
+        this.props.tags.key,
+        tagType
+      )
+    }
 
     return (
       <Paper square={true} className={classes.root}>
@@ -551,13 +552,15 @@ class SuperTable extends React.Component {
           updateSearch={val => this.updateSearch(val)}
           updateShowProp={prop => this.updateShowProp(prop)}
           updateShowValues={values => this.updateShowValues(values)}>
-          <TagBar
-            values={this.state.appliedTags}
-            options={this.state.tags}
-            updateTags={values => this.setState({ appliedTags: values })}
-            tagType={tagType}
-            setTagType={v => this.setState({ tagType: v })}
-          />
+          {this.props.tags && (
+            <TagBar
+              values={this.state.appliedTags}
+              options={this.state.tags}
+              updateTags={values => this.setState({ appliedTags: values })}
+              tagType={tagType}
+              setTagType={v => this.setState({ tagType: v })}
+            />
+          )}
         </EnhancedTableToolbar>
 
         <div className={classes.tableWrapper}>

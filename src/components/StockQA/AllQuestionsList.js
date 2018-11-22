@@ -111,7 +111,7 @@ class AllQuestionsList extends Component {
         disablePadding: true,
         label: "Show Details",
         show: true,
-        type: "deep",
+        type: "btnFunc",
         icon: (
           <Button color="primary" aria-label="Add to shopping cart">
             Show Details
