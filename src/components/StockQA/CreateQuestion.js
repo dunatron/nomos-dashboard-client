@@ -127,6 +127,15 @@ class CreateQuestion extends Component {
     })
   }
 
+  removeTagByValue = v => {
+    const tags = this.state.tags
+    const itemIdx = tags.connect.findIndex(t => t.id === v)
+    tags.connect.splice(itemIdx, 1)
+    this.setState({
+      tags: tags,
+    })
+  }
+
   renderNewQuestionNotes = questions => {
     return questions.map((question, questionIdx) => {
       return (
@@ -205,9 +214,10 @@ class CreateQuestion extends Component {
         />
         {/* {TagsSelector()} */}
         <TagsSelector
-          options={tagOptions}
+          // options={tagOptions}
           values={tagValues}
           handleChange={values => this.setTags(values)}
+          removeItem={v => this.removeTagByValue(v)}
         />
         <Typography className={classes.heading}>Answers</Typography>
         {answers.create ? this.renderNewAnswers(answers.create) : null}
@@ -264,10 +274,11 @@ class CreateQuestion extends Component {
         },
       })
       alert("New Question has been created => " + JSON.stringify(res))
+      this.clearComponent() // The idea being we retain data if they fuck it up
     } catch (e) {
       alert(e)
     } finally {
-      this.clearComponent()
+      // this.clearComponent()
     }
   }
 

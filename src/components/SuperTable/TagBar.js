@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react"
 import { withStyles } from "@material-ui/core/styles"
 import CheckBoxSelection from "../Inputs/CheckBoxSelection"
 import MultiSelect from "../Inputs/MultiSelect"
+import MultiSelectChip from "../Inputs/MultiSelectChip"
 import SelectOption from "../Inputs/SelectOption"
 
 const styles = theme => ({
@@ -24,12 +25,20 @@ const TagBar = props => {
         ]}
         handleChange={v => props.setTagType(v)}
       />
-      <MultiSelect
+      {/* <MultiSelect
         values={props.values}
         selectID="TAGS-SELECTOR"
         label={"TAGS"}
         options={props.options}
         handleChange={values => props.updateTags(values)}
+      /> */}
+      <MultiSelectChip
+        values={props.values}
+        selectID="TAGS-SELECTOR"
+        label={"TAGS"}
+        options={props.options}
+        handleChange={values => props.updateTags(values)}
+        removeItem={value => props.removeItem(value)}
       />
     </div>
   )

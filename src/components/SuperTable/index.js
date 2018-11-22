@@ -342,7 +342,7 @@ class SuperTable extends React.Component {
       ),
       // tagHeaders: propColumnHeaders.filter(confObj => confObj.type === "tag"),
       tags: props.tags ? props.tags.options : [],
-      tagType: "match",
+      tagType: "contains",
       appliedTags: [],
       page: 0,
       rowsPerPage: 5,
@@ -455,31 +455,21 @@ class SuperTable extends React.Component {
     return filteredData
   }
 
-  // filterDataByTags = (data, tags, found, key, filterType) => {
-  //   if (tags.length < 1) {
-  //     return data
-  //   }
-  //   // const filteredData = data.filter(o => {
-  //   //   // if (o[found].filter(t => tags.includes(t[key])).length >= 1) {
-  //   //   //   return true
-  //   //   // }
-  //   //   if (o[found].filter(t => tags.includes(t[key])).length === tags.length) {
-  //   //     return true
-  //   //   }
-  //   //   return false
-  //   // })
-  //   const filteredData = data.filter(
-  //     o => o[found].filter(t => tags.includes(t[key])).length === filterType === "match" ? tags.length : >=1
-  //   ) // can change tags.length to >= 1 to get a contains
-  //   return filteredData
-  // }
-
   isSelected = id => this.state.selected.indexOf(id) !== -1
 
   toggleBoolean = name =>
     this.setState({
       [name]: !this.state[name],
     })
+
+  removeTagByValue = v => {
+    const tags = this.state.appliedTags
+    const itemIdx = tags.findIndex(t => t === v)
+    tags.splice(itemIdx, 1)
+    this.setState({
+      appliedTags: tags,
+    })
+  }
 
   render() {
     const { classes, title, data } = this.props
@@ -559,6 +549,7 @@ class SuperTable extends React.Component {
               updateTags={values => this.setState({ appliedTags: values })}
               tagType={tagType}
               setTagType={v => this.setState({ tagType: v })}
+              removeItem={v => this.removeTagByValue(v)}
             />
           )}
         </EnhancedTableToolbar>
