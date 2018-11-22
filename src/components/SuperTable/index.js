@@ -22,11 +22,11 @@ import DialogPopup from "../DialogPopup/index"
 import CheckBoxSelection from "../Inputs/CheckBoxSelection"
 import SearchFilter from "../Inputs/SearchFilter"
 import SelectOption from "../Inputs/SelectOption"
+import MultiSelect from "../Inputs/MultiSelect"
 import SearchBar from "./SearchBar"
 import FilterBar from "./FilterBar"
 import TagBar from "./TagBar.js"
-import MultiSelect from "../Inputs/MultiSelect"
-import { split, path } from "ramda"
+import { split, path, lte } from "ramda"
 
 let counter = 0
 
@@ -154,7 +154,10 @@ let EnhancedTableToolbar = props => {
     toggleSearch,
     updateSearchCol,
     updateShowValues,
+    children,
   } = props
+
+  console.log("EnhancedTableToolbar props children => ", children)
 
   return (
     <div>
@@ -194,6 +197,7 @@ let EnhancedTableToolbar = props => {
         </div>
       </Toolbar>
       <Toolbar className={classes.barHolder}>
+
         <FilterBar
           open={searchOpen}
           columnHeaders={columnHeaders}
@@ -210,11 +214,14 @@ let EnhancedTableToolbar = props => {
           searchVal={props.searchValue}
           updateSearchCol={selected => props.updateSearchCol(selected)}
           updateSearchVal={val => props.updateSearch(val)}
-          options={props.columnHeaders.map(header => ({
-            name: header.label,
-            value: header.id,
-          }))}
+          options={props.columnHeaders
+            .filter(confObj => confObj.searchable === true)
+            .map(header => ({
+              name: header.label,
+              value: header.id,
+            }))}
         />
+        {searchOpen ? children : null}
       </Toolbar>
     </div>
   )
@@ -267,6 +274,29 @@ const filterDataByTags = (data, tags, found, key, filterType) => {
   if (tags.length < 1) {
     return data
   }
+
+  switch (filterType) {
+    case "match": {
+      const matchFilteredData = data.filter(
+        o => o[found].filter(t => tags.includes(t[key])).length === tags.length
+      )
+      return matchFilteredData
+    }
+    case "contains": {
+      const containsFilteredData = data.filter(
+        o => o[found].filter(t => tags.includes(t[key])).length >= 1
+      )
+      return containsFilteredData
+    }
+    default: {
+      const matchFilteredData = data.filter(
+        o => o[found].filter(t => tags.includes(t[key])).length === tags.length
+      )
+      return matchFilteredData
+    }
+  }
+
+  // can change tags.length to >= 1 to get a contains
   // const filteredData = data.filter(o => {
   //   // if (o[found].filter(t => tags.includes(t[key])).length >= 1) {
   //   //   return true
@@ -276,10 +306,15 @@ const filterDataByTags = (data, tags, found, key, filterType) => {
   //   }
   //   return false
   // })
-  const filteredData = data.filter(
-    o => o[found].filter(t => tags.includes(t[key])).length
-  ) // can change tags.length to >= 1 to get a contains
-  return filteredData
+  // const filteredData = data.filter(
+  //   o =>
+  //     o[found].filter(t => tags.includes(t[key])).length ===
+  //     (filterType === "match" ? tags.length : lte(1, ))
+  // ) // can change tags.length to >= 1 to get a contains
+  // const filteredData = data.filter(o =>
+  //   o[found].filter(t => tags.includes(t[key])).length(function(filterType) {})
+  // ) // can change tags.length to >= 1 to get a contains
+  // return filteredData
 }
 class SuperTable extends React.Component {
   constructor(props) {
@@ -308,6 +343,7 @@ class SuperTable extends React.Component {
       ),
       // tagHeaders: propColumnHeaders.filter(confObj => confObj.type === "tag"),
       tags: props.tags ? props.tags.options : [],
+      tagType: "match",
       appliedTags: [],
       page: 0,
       rowsPerPage: 5,
@@ -458,6 +494,7 @@ class SuperTable extends React.Component {
       searchCol,
       searchValue,
       searchOpen,
+      tagType,
     } = this.state
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, stateData.length - page * rowsPerPage)
@@ -475,20 +512,37 @@ class SuperTable extends React.Component {
       processedData,
       this.state.appliedTags,
       this.props.tags.found,
-      this.props.tags.key
+      this.props.tags.key,
+      tagType
     )
 
     return (
       <Paper square={true} className={classes.root}>
-        <TagBar
+        {/* <SelectOption
+          label="tag filter type"
+          value={tagType}
+          options={[
+            { name: "match", value: "match" },
+            { name: "contains", value: "contains" },
+          ]}
+          handleChange={v =>
+            this.setState({
+              tagType: v,
+            })
+          }
+        /> */}
+        {/* <TagBar
           values={this.state.appliedTags}
           options={this.state.tags}
           updateTags={values => this.setState({ appliedTags: values })}
-        />
+          tagType={tagType}
+          setTagType={v => this.setState({ tagType: v })}
+        /> */}
         <EnhancedTableToolbar
           title={title}
           numSelected={selected.length}
-          columnHeaders={this.state.searchHeaders}
+          columnHeaders={this.state.columnHeaders}
+          // columnHeaders={this.state.searchHeaders}
           searchOpen={searchOpen}
           toggleSearch={() => this.toggleBoolean("searchOpen")}
           searchCol={this.state.searchCol}
@@ -496,8 +550,15 @@ class SuperTable extends React.Component {
           searchValue={this.state.searchValue}
           updateSearch={val => this.updateSearch(val)}
           updateShowProp={prop => this.updateShowProp(prop)}
-          updateShowValues={values => this.updateShowValues(values)}
-        />
+          updateShowValues={values => this.updateShowValues(values)}>
+          <TagBar
+            values={this.state.appliedTags}
+            options={this.state.tags}
+            updateTags={values => this.setState({ appliedTags: values })}
+            tagType={tagType}
+            setTagType={v => this.setState({ tagType: v })}
+          />
+        </EnhancedTableToolbar>
 
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">

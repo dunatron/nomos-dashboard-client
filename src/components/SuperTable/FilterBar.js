@@ -8,7 +8,7 @@ const styles = theme => ({
   content: {
     overflow: "hidden",
     flexBasis: "100%",
-    transition: "all 0.8s ease",
+    transition: "all 0.5s ease",
   },
   closed: {
     height: 0,
@@ -16,9 +16,10 @@ const styles = theme => ({
     opacity: 0,
   },
   open: {
+    overflow: "auto",
     opacity: 1,
-    height: theme.spacing.unit * 10,
-    minHeight: theme.spacing.unit * 10,
+    height: theme.spacing.unit * 8,
+    minHeight: theme.spacing.unit * 8,
   },
 })
 
@@ -35,7 +36,7 @@ const FilterBar = props => {
           props.updateShowProp(optionObj)
         }}
       />
-      <MultiSelect
+      {/* <MultiSelect
         values={props.columnHeaders
           .filter(header => header.show === true)
           .map(h => {
@@ -50,7 +51,7 @@ const FilterBar = props => {
           }
         })}
         handleChange={values => props.updateShowValues(values)}
-      />
+      /> */}
     </div>
   )
 }

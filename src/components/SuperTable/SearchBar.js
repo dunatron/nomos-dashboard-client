@@ -8,7 +8,7 @@ const styles = theme => ({
   content: {
     overflow: "hidden",
     flexBasis: "100%",
-    transition: "all 0.8s ease",
+    transition: "all 0.5s ease",
   },
   closed: {
     height: 0,
