@@ -15,7 +15,7 @@ import { graphql, compose, withApollo, Query } from "react-apollo"
 import { difference } from "ramda"
 
 // Queries
-// import { QUESTION_FEED } from "../../queries/QuestionFeed.graphql"
+import { QUESTION_FEED } from "../../queries/QuestionFeed.graphql"
 // Mutations
 import { UPDATE_QUESTION } from "../../mutations/UpdateQuestion.graphql"
 //components
@@ -124,6 +124,8 @@ class EditableQuestionCard extends Component {
   }
 
   _update = async () => {
+    console.log("Check the state => ", this.state)
+    console.log("This.props >?? => ", this.props)
     try {
       const res = await this.props.updateStockQuestion({
         variables: {
@@ -136,7 +138,34 @@ class EditableQuestionCard extends Component {
             tags: { ...this.state.tags },
           },
         },
+        update: async (proxy, { data }) => {
+          // Read the data from our cache for this query.
+          console.log("Proxy => ", proxy)
+          const questionFeed = await proxy.readQuery({ query: QUESTION_FEED })
+          console.log("questionFeed => ", questionFeed)
+          console.log("data => ", data)
+
+          // If you are using the Query service (TodoAppGQL) instead of defining your GQL as a constant, you can reference the query as:
+          // const data = proxy.readQuery({ query: this.todoAppGQL.document });
+
+          // Add our todo from the mutation to the end.
+          // data.todos.push(createTodo);
+
+          // Write our data back to the cache.
+          // proxy.writeQuery({ query: QUESTION_FEED, data });
+
+          // alternatively when using Query service:
+          // proxy.writeQuery({ query: this.todoAppGQL.document, data });
+        },
       })
+      // const data = this.props.client.query({ query: QUESTION_FEED })
+      // const data = await this.props.client.query({
+      //   query: this.state.searchType,
+      //   variables: {
+      //     search: search,
+      //   },
+      // })
+      // console.log("data from reading query => ", data)
       alert("Question   has been updated => " + JSON.stringify(res))
     } catch (e) {
       alert(e)
@@ -261,18 +290,26 @@ class EditableQuestionCard extends Component {
 
   setTags = values => {
     const connectArr = values.map(v => ({ id: v }))
-    const currTags = this.state.tags.connect
+    const currTags = this.state.tags.connect.map(cT => ({ id: cT.id }))
     const disconnectArr = difference(currTags, connectArr)
+    console.group("setTags")
+    console.log("this.state =? ", this.state)
+    console.log("values => ", values)
+    console.log("currTags => ", currTags)
+    console.log("connectArr => ", connectArr)
+    console.log("disconnectArr => ", disconnectArr)
+    console.groupEnd()
     this.setState({
       tags: {
-        ...this.state.tags,
+        // ...this.state.tags,
         connect: connectArr,
-        disconnect: disconnectArr,
+        // disconnect: [...this.state.tags.disconnect, ...disconnectArr],
+        disconnect: this.state.tags.disconnect.concat(disconnectArr),
       },
     })
   }
 
-  removeTagByValue = (v) => {
+  removeTagByValue = v => {
     alert("To DO removeTagByValue on EditableQuestionCard")
     // const tags = this.state.tags
     // const itemIdx = tags.connect.findIndex(t => t.id === v)
