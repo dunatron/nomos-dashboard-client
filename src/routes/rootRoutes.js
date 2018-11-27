@@ -7,6 +7,7 @@ import LeavePage from "../pages/LeavePage"
 import AllLeavePage from "../pages/AllLeavePage"
 import LeaveCalendarPage from "../pages/LeaveCalendarPage"
 import StockQAPage from "../pages/StockQAPage"
+import LineReportPage from "../pages/LineReportPage"
 // Icons
 import ArrowBackIcon from "@material-ui/icons/ArrowBackIos"
 import PermContactIcon from "@material-ui/icons/PermContactCalendar"
@@ -88,6 +89,15 @@ const rootRoutes = [
     main: true,
     restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
     component: StockQAPage,
+  },
+  {
+    title: "Line Report",
+    path: "/line-report",
+    icon: <PermContactIcon color="primary" style={styles.icon} />,
+    panel: true,
+    main: true,
+    restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
+    component: LineReportPage,
   },
 ]
 
