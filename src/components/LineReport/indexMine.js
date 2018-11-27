@@ -1,4 +1,46 @@
 import React, { Component } from "react"
+import { withStyles } from "@material-ui/core/styles"
+
+const styles = theme => ({
+  lineReport: {
+    width: 1200,
+    display: "flex",
+  },
+  rowKeyPanel: {
+    minWidth: 400,
+    backgroundColor: "lightgrey",
+  },
+  columnPanels: {
+    display: "flex",
+    maxWidth: 800,
+    overflow: "auto",
+  },
+  columnPanel: {},
+  columnTitle: {
+    margin: 0,
+    height: 40,
+    padding: 15,
+  },
+  columnCell: {
+    display: "block",
+    margin: 0,
+  },
+  typeHeader: {
+    height: 80,
+    padding: 5,
+    fontSize: "18px",
+  },
+  typeH1: {
+    height: 60,
+    fontSize: "16px",
+    padding: 5,
+    fontWeight: 900,
+  },
+  typeP: {
+    padding: 5,
+    height: 30,
+  },
+})
 
 class LineReport extends Component {
   state = {
@@ -31,15 +73,15 @@ class LineReport extends Component {
   }
 
   render() {
-    const { data, rowProps, columnProps } = this.props
+    const { classes, data, rowProps, columnProps } = this.props
     return (
-      <div id="affix-target" className="lineReport">
-        <div className="rowKeyPanel">
-          <div className="columnTitle" />
+      <div id="affix-target" className={classes.lineReport}>
+        <div className={classes.rowKeyPanel}>
+          <div className={classes.columnTitle} />
           {rowProps.map((rowProp, rIdx) => this.renderRowKey(rowProp, rIdx))}
         </div>
 
-        <div className="columnPanels">
+        <div className={classes.columnPanels}>
           {data.map((dataColumn, cIdx) => this.renderColumn(dataColumn, cIdx))}
         </div>
       </div>
@@ -47,21 +89,20 @@ class LineReport extends Component {
   }
 
   renderRowKey = ({ name, key, type }) => {
+    const { classes } = this.props
     switch (type) {
       case "header":
-        return <div className="typeHeader">{name}</div>
+        return <div className={classes.typeHeader}>{name}</div>
       case "p":
-        return <div className="type">{name}</div>
+        return <div className={classes.typeP}>{name}</div>
       case "h1":
-        return <div className="typeH1">{name}</div>
-      default:
-        return
+        return <div className={classes.typeH1}>{name}</div>
     }
   }
 
   renderColumn = ({ columnTitle, values }, cIdx) => {
     const columnColor = cIdx % 2 === 0 ? "#ffffff" : "#f2f2f2"
-    const { rowProps } = this.props
+    const { classes, rowProps } = this.props
     let affixStyle = {
       position: "relative",
       // width: `${panelWidth}px`,
@@ -74,16 +115,18 @@ class LineReport extends Component {
     }
     return (
       <div
-        className="columnPanel"
+        className={classes.columnPanel}
         style={{
           backgroundColor: columnColor,
           width: `${this.props.colWidth}px`,
         }}>
-        <p className="columnTitle" style={affixStyle}>
+        <p className={classes.columnTitle} style={affixStyle}>
           {columnTitle}
         </p>
         {rowProps.map((rowProp, rIdx) => {
           const { name, key, type } = rowProp
+          // return <span className={classes.columnCell}>{values[key]}</span>
+          // this.renderCellType(rowProp, values[key])
           const cellValue = values[key]
           return this.renderCellType(rowProp, cellValue)
         })}
@@ -92,17 +135,20 @@ class LineReport extends Component {
   }
 
   renderCellType = ({ name, key, type }, val) => {
+    // return <div>{val}</div>
+    console.log("val in renderCellType => ", val)
+    const { classes } = this.props
     switch (type) {
       case "p": {
-        return <div className="typeP">{this.getCellValue(val)}</div>
+        return <div className={classes.typeP}>{this.getCellValue(val)}</div>
       }
       case "h1": {
-        return <div className="typeH1">{this.getCellValue(val)}</div>
+        return <div className={classes.typeH1}>{this.getCellValue(val)}</div>
       }
       case "header":
-        return <div className="typeHeader">{this.getCellValue(val)}</div>
-      default:
-        return
+        return (
+          <div className={classes.typeHeader}>{this.getCellValue(val)}</div>
+        )
     }
   }
 
@@ -116,4 +162,4 @@ class LineReport extends Component {
   }
 }
 
-export default LineReport
+export default withStyles(styles)(LineReport)

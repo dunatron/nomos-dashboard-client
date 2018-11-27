@@ -60,3 +60,46 @@
   /* transition: opacity 300ms ease-in; */
   transition: opacity 0ms ease-in;
 }
+
+/* V4 Line Report css */
+
+.lineReport {
+  width: 1200px;
+  display: flex;
+}
+
+.rowKeyPanel {
+  min-width: 400px;
+  background-color: lightgrey;
+}
+.columnPanels {
+  display: flex;
+  max-width: 800px;
+  overflow: auto;
+}
+.columnPanel {
+}
+.columnTitle {
+  margin: 0;
+  height: 40px;
+  padding: 15px;
+}
+.columnCell {
+  display: block;
+  margin: 0;
+}
+.typeHeader {
+  height: 80px;
+  padding: 5px;
+  font-size: 18px;
+}
+.typeH1 {
+  height: 60px;
+  font-size: 16px;
+  padding: 5px;
+  font-weight: 900;
+}
+.typeP {
+  padding: 5px;
+  height: 30px;
+}
