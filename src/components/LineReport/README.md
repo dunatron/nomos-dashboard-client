@@ -10,7 +10,7 @@ This is the straight line reporting reusable component.
 
 #### Usage
 
-```
+```js
 const data = [
   {
     columnTitle: "Equipment",
