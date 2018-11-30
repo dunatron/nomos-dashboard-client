@@ -65,9 +65,14 @@
 
 .lineReport {
   position: relative;
+  overflow: hidden;
   background: #fff;
   width: 1200px;
   display: flex;
+  /* opacity: 0.01; */
+  /* transition: opacity 300ms ease-in; */
+  opacity: 1;
+  transition: all 500ms ease-in;
 }
 
 .rowKeyPanel {
@@ -139,9 +144,14 @@
 }
 
 /* Custom ScrollBar */
-#top-scroll-bar {
+.top-scroll-bar {
   position: absolute;
   z-index: 9999;
   overflow-x: auto;
+  overflow-y: hidden;
   height: 15px; /* scrollbar height */
+}
+
+.hidden {
+  opacity: 0;
 }

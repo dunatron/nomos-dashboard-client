@@ -250,6 +250,39 @@ class LineReportPage extends Component {
           <h1>Mr Martin </h1>
         </div>
         <LineReport
+          id={1}
+          name="A Disclosure Port"
+          maxHeight={1200}
+          data={data}
+          rowProps={rowProps}
+          reportWidth={1200}
+          keyPanelWidth={400}
+          colWidth={180}
+        />
+        <LineReport
+          id={2}
+          name="A Disclosure Port 2"
+          maxHeight={1200}
+          data={data}
+          rowProps={rowProps}
+          reportWidth={1200}
+          keyPanelWidth={400}
+          colWidth={180}
+        />
+        <LineReport
+          id={3}
+          name="A Disclosure Port 3"
+          maxHeight={1200}
+          data={data}
+          rowProps={rowProps}
+          reportWidth={1200}
+          keyPanelWidth={400}
+          colWidth={180}
+        />
+        <LineReport
+          id={4}
+          name="A Disclosure Port 4"
+          maxHeight={1200}
           data={data}
           rowProps={rowProps}
           reportWidth={1200}

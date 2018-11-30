@@ -1,6 +1,9 @@
 import React, { Component } from "react"
+import Button from "@material-ui/core/Button"
 
 class LineReport extends Component {
+  // IMPORTANT NOTE> THE JITTERING IS HAPPENING WHEN YOU SCROLL ON THE WHITE KEY PANEL SECTION ONLY
+  // IMPORTAN NOTE> COPY WHAT YOU HAVE DONE SO FAR ON THe v4. It does not jitter
   constructor(props) {
     super(props)
     this.setWrapperRef = this.setWrapperRef.bind(this)
@@ -8,6 +11,7 @@ class LineReport extends Component {
       affix: false,
       topDist: 0,
       scrollLeftVal: 0,
+      collapsed: true,
     }
   }
   // state = {
@@ -16,29 +20,34 @@ class LineReport extends Component {
   // }
 
   componentDidMount = () => {
+    // affix column title to top ToDo: rename these scroll listers to appropriate names
     window.addEventListener("scroll", this.handleScroll)
-    var el = document.querySelector("#top-scroll-bar")
+    // Horizontal Column scroll bindings for the top
+    var el = document.querySelector(`#top-scroll-bar-${this.props.id}`)
     el.addEventListener("scroll", this.handleTopScroll)
     this.wrapperRef.addEventListener("scroll", this.handleBottomScroll)
-    // console.log("Will this work? ", el)
-    // window.addEventListener("scroll", this.handleTopScroll)
   }
 
   componentWillUnmount = () => {
+    // affix column title to top ToDo: rename these scroll listers to appropriate names
     window.removeEventListener("scroll", this.handleScroll)
+    // Horizontal Column scroll bindings for the top
+    var el = document.querySelector(`#top-scroll-bar-${this.props.id}`)
+    el.removeEventListener("scroll", this.handleTopScroll)
+    this.wrapperRef.removeEventListener("scroll", this.handleBottomScroll)
   }
-
-  componentWillUpdate() {
-    // console.log("Update => this.wrapperRef ", this.wrapperRef)
-    if (
-      this.wrapperRef &&
-      this.wrapperRef.scrollLeft !== this.state.scrollLeftVal
-    ) {
-      this.setState({
-        scrollLeftVal: this.wrapperRef.scrollLeft,
-      })
-    }
-  }
+  // DONT THINK WE EVER NEED THIS> PROBABLY DELETE
+  // componentWillUpdate() {
+  //   // console.log("Update => this.wrapperRef ", this.wrapperRef)
+  //   if (
+  //     this.wrapperRef &&
+  //     this.wrapperRef.scrollLeft !== this.state.scrollLeftVal
+  //   ) {
+  //     this.setState({
+  //       scrollLeftVal: this.wrapperRef.scrollLeft,
+  //     })
+  //   }
+  // }
 
   setWrapperRef(node) {
     // console.log("Setting wrapper ref ", node)
@@ -46,20 +55,20 @@ class LineReport extends Component {
   }
 
   handleTopScroll = () => {
-    // console.log("FUck a nigga up in my chucks")
-    var el = document.querySelector("#top-scroll-bar")
+    var el = document.querySelector(`#top-scroll-bar-${this.props.id}`)
     const leftVal = el.scrollLeft
     this.wrapperRef.scrollLeft = leftVal
   }
 
   handleBottomScroll = () => {
     const leftVal = this.wrapperRef.scrollLeft
-    var el = document.querySelector("#top-scroll-bar")
+    var el = document.querySelector(`#top-scroll-bar-${this.props.id}`)
     el.scrollLeft = leftVal
   }
 
   handleScroll = event => {
-    var el = document.querySelector("#affix-target")
+    // var el = document.querySelector("#affix-target")
+    var el = document.querySelector(`#affix-target-${this.props.id}`)
     const { affix } = this.state
     if (el.getBoundingClientRect().y < 0) {
       this.setState({
@@ -76,46 +85,70 @@ class LineReport extends Component {
 
   render() {
     const {
+      id,
       data,
       rowProps,
       columnProps,
       reportWidth,
       keyPanelWidth,
       colWidth,
+      name,
+      maxHeight,
     } = this.props
     const colPanelWidth = reportWidth - keyPanelWidth
-    const { affix } = this.state
+    const { affix, collapsed } = this.state
     let affixTopScrollBar = {
       top: affix ? `${this.state.topDist + 30}px` : "30px",
     }
+    let accordionStyle = {
+      maxHeight: collapsed ? 0 : `${maxHeight}px`,
+    }
     return (
-      <div id="affix-target" className="lineReport">
-        <div className="rowKeyPanel">
-          <div className="columnTitle" />
-          {rowProps.map((rowProp, rIdx) => this.renderRowKey(rowProp, rIdx))}
+      <div style={{ marginBottom: "30px" }}>
+        <div>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => this.setState({ collapsed: !this.state.collapsed })}>
+            Toggle {name}
+          </Button>
         </div>
-
         <div
-          id="top-scroll-bar"
-          style={{
-            ...affixTopScrollBar,
-            width: `${colPanelWidth}px`,
-            marginLeft: `${keyPanelWidth}px`,
-          }}>
-          <div style={{ width: `${colWidth * data.length}px` }}>
-            <div style={{ visibility: "hidden" }}>
-              You can't see me. But I see you. Lord{" "}
+          // id="affix-target"
+          id={`affix-target-${this.props.id}`}
+          className={`lineReport ${collapsed ? "hidden" : ""}`}
+          style={{ ...accordionStyle }}>
+          <div className="rowKeyPanel">
+            <div className="columnTitle" />
+            {rowProps.map((rowProp, rIdx) => this.renderRowKey(rowProp, rIdx))}
+          </div>
+
+          <div
+            // id="top-scroll-bar"
+            className="top-scroll-bar"
+            id={`top-scroll-bar-${this.props.id}`}
+            style={{
+              ...affixTopScrollBar,
+              width: `${colPanelWidth}px`,
+              marginLeft: `${keyPanelWidth}px`,
+            }}>
+            <div style={{ width: `${colWidth * data.length}px` }}>
+              <div style={{ visibility: "hidden" }}>
+                You can't see me. But I see you. Lord{" "}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="columnPanels" ref={this.setWrapperRef}>
-          {/* {affix && <div id="top-scroll-bar">I should be a scrollbar</div>} */}
-          {/* <div id="top-scroll-bar" style={{ width: `${colPanelWidth}px` }}>
+          <div className="columnPanels" ref={this.setWrapperRef}>
+            {/* {affix && <div id="top-scroll-bar">I should be a scrollbar</div>} */}
+            {/* <div id="top-scroll-bar" style={{ width: `${colPanelWidth}px` }}>
             <div style={{ width: `${colWidth * data.length}px` }}>
               I should be a scrollbar hmmm
             </div>
           </div> */}
-          {data.map((dataColumn, cIdx) => this.renderColumn(dataColumn, cIdx))}
+            {data.map((dataColumn, cIdx) =>
+              this.renderColumn(dataColumn, cIdx)
+            )}
+          </div>
         </div>
       </div>
     )
