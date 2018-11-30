@@ -64,15 +64,20 @@
 /* V4 Line Report css */
 
 .lineReport {
+  position: relative;
+  background: #fff;
   width: 1200px;
   display: flex;
 }
 
 .rowKeyPanel {
+  position: relative;
   min-width: 400px;
-  background-color: lightgrey;
+  /* background-color: lightgrey; */
+  background-color: #fff;
 }
 .columnPanels {
+  position: relative;
   display: flex;
   max-width: 800px;
   overflow: auto;
@@ -82,24 +87,61 @@
 .columnTitle {
   margin: 0;
   height: 40px;
-  padding: 15px;
+  padding: 5px;
+  color: rgb(68, 69, 69);
 }
 .columnCell {
   display: block;
   margin: 0;
 }
 .typeHeader {
-  height: 80px;
+  display: flex;
+  align-items: center;
+  height: 40px;
   padding: 5px;
   font-size: 18px;
+  color: #444545;
 }
 .typeH1 {
-  height: 60px;
+  display: flex;
+  align-items: center;
+  height: 40px;
   font-size: 16px;
   padding: 5px;
   font-weight: 900;
+  color: #444545;
 }
 .typeP {
+  display: flex;
+  align-items: center;
   padding: 5px;
   height: 30px;
+  color: #444545;
+}
+.typeHr {
+  border: none;
+  border-top: 1px solid #ccc;
+}
+.flex-end {
+  justify-content: flex-end;
+}
+
+.missing {
+  opacity: 0.6;
+}
+
+.red {
+  color: red;
+}
+
+.bold {
+  font-weight: 900;
+}
+
+/* Custom ScrollBar */
+#top-scroll-bar {
+  position: absolute;
+  z-index: 9999;
+  overflow-x: auto;
+  height: 15px; /* scrollbar height */
 }
