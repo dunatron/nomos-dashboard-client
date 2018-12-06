@@ -2,13 +2,25 @@
 
 This is the straight line reporting reusable component.
 
+It has two main props `rowProps` and `data`
+
+```
+rowProps
+```
+
+rowProps is an array of objects and is your config. each object is a line on the report.
+
+```
+data
+```
+
+#### How does it work
+
+essentially we will loop over the `data` conf as these are our columns. Inside each column we loop over the `rowProps` config which will render something for every object. it does this by knowing what its type and key || keys are.
+
 #### Props
 
-`data`
-`rowProps`
-`colWidth`
-
-#### Usage
+###### data conf
 
 ```js
 const data = [
@@ -29,7 +41,7 @@ const data = [
     },
   },
 ]
-const REPORT_ROW_PROPS = [
+const rowProps = [
   {
     name: "ROU ASSET CARRYING VALUE ROLL FORWARD",
     type: "header",
@@ -56,7 +68,17 @@ const REPORT_ROW_PROPS = [
   },
 ]
 
-<LineReport data={data} rowProps={rowProps} colWidth={180} />
+<LineReport
+  id={1}
+  name="ROU ASSET CARRYING VALUE ROLL FORWARD"
+  maxHeight={1200}
+  data={data}
+  rowProps={rowProps}
+  reportWidth={1200}
+  keyPanelWidth={400}
+  colWidth={180}
+  collapsed={false}
+/>
 
 ```
 
@@ -88,7 +110,38 @@ const EXEMPT_ROW_PROPS = [
   },
 ```
 
-###### LineExportButton example
+## Component examples
+
+###### LineReport
+
+```js
+
+{
+  id: Unique, // This must be unique or suffer the consequences 😈
+  name: String // name of the report,
+  maxHeight:1200, // used for the css transition. make it the same or greater than your reports height
+  data: [] // data conf
+  rowProps:[]// rowProp conf
+  reportWidth: 1200, // width of the report
+  keyPanelWidth: 400, // width of the first panel(key column)
+  colWidth: 180, // width of each column
+  collapsed: Boolean // if this report should be collapsed by default
+}
+
+<LineReport
+  id={1}
+  name="ROU ASSET CARRYING VALUE ROLL FORWARD"
+  maxHeight={1200}
+  data={disclosureReport}
+  rowProps={DISCLOSURE_ROW_PROPS}
+  reportWidth={1200}
+  keyPanelWidth={400}
+  colWidth={180}
+  collapsed={false}
+/>
+```
+
+###### LineExportButton
 
 ```js
 <LineExportButton
@@ -104,4 +157,16 @@ const EXEMPT_ROW_PROPS = [
       : alert("Generate report first")
   }
 />
+```
+
+## Functions
+
+When exporting you can use the `LineCsvExport` function if you generated the report using the LineReport.
+
+###### LineCsvExport
+
+Takes 3 params. your `rowProps` conf, `data` conf and a name for the file
+
+```js
+LineCsvExport(rowProps, data, "CSV - Maturity Analysis Report")
 ```
