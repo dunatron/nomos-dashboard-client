@@ -148,13 +148,12 @@ const EXEMPT_ROW_PROPS = [
   name="CSV - Maturity Analysis Report"
   icon="csv"
   onClick={() =>
-    disclosureReport
-      ? LineCsvExport(
-          EXEMPT_ROW_PROPS,
-          mobx.toJS(exemptReport),
-          "CSV - Maturity Analysis Report"
-        )
-      : alert("Generate report first")
+    // see functions for LineCsvExport
+    LineCsvExport(
+      EXEMPT_ROW_PROPS,
+      mobx.toJS(exemptReport),
+      "CSV - Maturity Analysis Report"
+    )
   }
 />
 ```
