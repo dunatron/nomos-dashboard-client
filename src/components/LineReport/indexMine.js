@@ -135,8 +135,6 @@ class LineReport extends Component {
   }
 
   renderCellType = ({ name, key, type }, val) => {
-    // return <div>{val}</div>
-    console.log("val in renderCellType => ", val)
     const { classes } = this.props
     switch (type) {
       case "p": {

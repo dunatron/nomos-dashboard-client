@@ -42,12 +42,8 @@ class LeaveList extends Component {
     subscribeToMore({
       document: NEW_LEAVES_SUBSCRIPTION,
       updateQuery: (prev, { subscriptionData }) => {
-        console.log("subscriptionData => ", subscriptionData)
         if (!subscriptionData.data) return prev
         const newLeave = subscriptionData.data.newLeave.node
-
-        console.log(" prev => ", prev)
-
         return Object.assign({}, prev, {
           leaveFeed: {
             leaves: [newLeave, ...prev.leaveFeed.leaves],
@@ -63,19 +59,11 @@ class LeaveList extends Component {
     await this.setState({
       betweenFilter: this.generateFilterDates(filterProps.date),
     })
-    console.group("_fetchMoreLeave")
-    console.log("filterProps => ", filterProps)
-    console.log("fetchMore => ", fetchMore)
-    console.log("data => ", data)
     console.groupEnd()
     const qVars = this._getQueryVariables()
     fetchMore({
       variables: { ...qVars },
       updateQuery: (prev, { fetchMoreResult }) => {
-        console.group("updateQuery")
-        console.log("prev => ", prev)
-        console.log("fetchMoreResult => ", fetchMoreResult)
-        console.groupEnd()
         if (!fetchMoreResult) return prev
         return Object.assign({}, prev, {
           leaveFeed: [...prev.leaveFeed, ...fetchMoreResult.leaveFeed],
@@ -93,7 +81,6 @@ class LeaveList extends Component {
   }
 
   render() {
-    console.log("Leave Calendar props => ", this.props)
     return (
       <Query
         query={LEAVE_FEED}
@@ -105,25 +92,17 @@ class LeaveList extends Component {
               <Calendar
                 loading={loading}
                 initDate={this.state.date}
-                // data={calendarData}
                 fetchMoreData={props =>
                   this._fetchMoreLeave(props, fetchMore, data)
                 }
               />
             )
-          // if (loading) return <div>Loading</div>
           if (error) return <div>Error</div>
 
           this._subscribeToNewLeave(subscribeToMore)
 
           const { leaveFeed } = data
           const { count, leaves } = leaveFeed
-
-          console.group("leaveFeed")
-          console.log("leaveFeed => ", leaveFeed)
-          console.log("count => ", count)
-          console.log("leaves => ", leaves)
-          console.groupEnd()
 
           const calendarData = leaveFeed.leaves
             // .filter(l => l.status === "ACCEPTED")
@@ -143,7 +122,6 @@ class LeaveList extends Component {
                 })
                 objDate.add(1, "days")
               }
-              // return dates
               return acc.concat(dates)
             }, [])
 

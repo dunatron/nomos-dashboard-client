@@ -48,6 +48,39 @@ class AllQuestionsList extends Component {
     })
   }
 
+  _updateQuestionInCache = (updatedQuestion, updateQuery) => {
+    updateQuery(previousResult => {
+      console.group("_updateQuestionInCache")
+      console.log("previousResult => ", previousResult)
+      console.log("updatedQuestion => ", updatedQuestion)
+
+      console.log(
+        "previousResult.questionFeed.questions => ",
+        previousResult.questionFeed.questions
+      )
+      console.log(
+        " updatedQuestion.data.updateQuestion.id => ",
+        updatedQuestion.data.updateQuestion.id
+      )
+
+      // 1. I think we find the indexOf for the previous result based on the id.
+      const indexFound = previousResult.questionFeed.questions.indexOf(
+        q => q.id === updatedQuestion.data.updateQuestion.id
+      )
+      console.log("indexFound => ", indexFound)
+      // 2. then we simply slice out and replace the object at that index
+      console.groupEnd()
+      return Object.assign({}, previousResult, {
+        questionFeed: {
+          count: previousResult.questionFeed.count,
+          questions: [...previousResult.questionFeed.questions],
+          __typename: "QuestionFeed",
+          __proto__: Object,
+        },
+      })
+    })
+  }
+
   showDetails = dataObj => {
     this.setState({
       modalDetailsObj: dataObj,
@@ -66,13 +99,18 @@ class AllQuestionsList extends Component {
     })
   }
 
-  renderModalDetails = () => {
+  renderModalDetails = updateQuery => {
     const { modalDetailsObj } = this.state
     // const { id, name, answers, links, notes, tags } = modalDetailsObj
     return (
       <div>
         <h2>I am the details for a modal</h2>
-        <EditableQuestionCard question={modalDetailsObj} />
+        <EditableQuestionCard
+          question={modalDetailsObj}
+          updateQuestion={res => {
+            this._updateQuestionInCache(res, updateQuery)
+          }}
+        />
       </div>
     )
   }
@@ -129,13 +167,18 @@ class AllQuestionsList extends Component {
     const {
       data: { loading, error, allTags },
     } = this.props
-    console.log("=======this.props.data======== ", this.props.data)
     return (
       <Query query={QUESTION_FEED} variables={this._getQueryVariables()}>
-        {({ loading, error, data, subscribeToMore, fetchMore }) => {
+        {({
+          loading,
+          error,
+          data,
+          subscribeToMore,
+          fetchMore,
+          updateQuery,
+        }) => {
           if (loading && !data.questionFeed) return <div>Fetching</div>
           if (error) return <div>Error</div>
-
           // this._subscribeToNewSamples(subscribeToMore)
           // this._subscribeToNewVotes(subscribeToMore)
 
@@ -146,19 +189,14 @@ class AllQuestionsList extends Component {
           // const pageIndex = this.props.match.params.page
           //   ? (this.props.match.params.page - 1) * SAMPLES_PER_PAGE
           //   : 0
-          console.log("Data => ", data)
           const { questionFeed } = data
           if (!questionFeed) {
-            console.log("No Question Feed => ", data)
             return "No Question Feed"
           }
           const { questions, count } = questionFeed
-          console.log("The total count => ", count)
-          console.log("What we actually have => ", questions.length)
 
           if (questions.length < count) {
             // we need to keep fetching
-            console.log("wee need to fetch more")
             this._fetchMore(fetchMore, questions.length)
           }
 
@@ -167,7 +205,7 @@ class AllQuestionsList extends Component {
               {modalIsOpen ? (
                 <Modal width={800} height={500} close={() => this.closeModal()}>
                   <div onClick={() => this.closeModal()}>Close</div>
-                  {this.renderModalDetails()}
+                  {this.renderModalDetails(updateQuery)}
                 </Modal>
               ) : null}
               <div>
@@ -195,18 +233,15 @@ class AllQuestionsList extends Component {
   }
 
   executeFunctionByName = (functionName, dataObj /*, args */) => {
-    console.log("The dataObj ", dataObj)
     switch (functionName) {
       case "showDetails":
         this.showDetails(dataObj)
         break
       default:
-        alert("No funct specified")
+        alert("No function specified")
     }
   }
 }
-
-// export default compose(withApollo)(AllQuestionsList)
 
 export default compose(
   graphql(ALL_TAGS),

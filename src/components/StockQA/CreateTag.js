@@ -53,16 +53,9 @@ class CreateTag extends Component {
     subscribeToMore({
       document: NEW_TAG_SUBSCRIPTION,
       updateQuery: (prev, { subscriptionData }) => {
-        console.log("subscriptionData => ", subscriptionData)
         if (!subscriptionData.data) return prev
-
-        // const newTag = subscriptionData.data.newTag.node
-        // return Object.assign({}, prev, {
-        //   allTags: [newTag, ...prev.allTags],
-        // })
         const { node } = subscriptionData.data.newTag
         return Object.assign({}, prev, {
-          // allMessages: [node, ...prev.allMessages].slice(0, 20),
           allTags: [node, ...prev.allTags],
         })
       },
@@ -73,13 +66,7 @@ class CreateTag extends Component {
     const { creating, name } = this.state
     const {
       classes,
-      // tags: { allTags, error, loading, updateQuery, subscribeToMore },
     } = this.props
-    // console.log("this.props => ", this.props)
-    // if (loading) return "Loading Tags"
-
-    // // subscribe to any new Tags
-    // this._subscribeToNewTags(subscribeToMore)
 
     return (
       <div className={classes.root}>
@@ -107,24 +94,13 @@ class CreateTag extends Component {
               subscribeToMore({
                 document: NEW_TAG_SUBSCRIPTION,
                 updateQuery: (prev, { subscriptionData }) => {
-                  console.group("subscription")
-                  console.log("subscriptionData => ", subscriptionData)
-                  console.log("prev => ", prev)
-                  console.groupEnd()
                   if (!subscriptionData.data) return prev
-                  // const { mutation, node } = subscriptionData.data.Message;
-                  // // if (mutation !== 'CREATED') return prev;
-                  // return Object.assign({}, prev, {
-                  //   allMessages: [node, ...prev.allMessages].slice(0, 20),
-                  // });
                   const { node } = subscriptionData.data.newTag
                   return Object.assign({}, prev, {
-                    // allMessages: [node, ...prev.allMessages].slice(0, 20),
                     allTags: [node, ...prev.allTags],
                   })
                 },
               })
-            // return <MessageListView data={data} subscribeToMore={more} />
             return (
               <SuperTable
                 columnHeaders={COLUMN_HEADERS}
@@ -134,13 +110,6 @@ class CreateTag extends Component {
                 executeFunc={(funcName, obj) => {
                   this.executeFunctionByName(funcName, obj)
                 }}
-                // tags={{
-                //   found: "tags",
-                //   key: "id",
-                //   options: data.allTags
-                //     ? data.allTags.map(t => ({ name: t.name, value: t.id }))
-                //     : [],
-                // }}
               />
             )
           }}
@@ -150,18 +119,6 @@ class CreateTag extends Component {
   }
 
   _createTag = async () => {
-    // await this.props
-    //   .createTag({
-    //     variables: {
-    //       name: this.state.name,
-    //     },
-    //   })
-    //   .then(res => {
-    //     alert("res " + res)
-    //   })
-    //   .catch(e => {
-    //     alert(e)
-    //   })
     this.props
       .createTag({
         variables: {
@@ -184,7 +141,6 @@ CreateTag.propTypes = {
 
 export default compose(
   withStyles(styles),
-  // graphql(ALL_TAGS, { name: "tags" }),
   graphql(CREATE_TAG, { name: "createTag" }),
   withApollo
 )(CreateTag)

@@ -157,8 +157,6 @@ let EnhancedTableToolbar = props => {
     children,
   } = props
 
-  console.log("EnhancedTableToolbar props children => ", children)
-
   return (
     <div>
       <Toolbar

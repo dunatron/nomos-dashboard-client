@@ -36,21 +36,8 @@ class LineReport extends Component {
     el.removeEventListener("scroll", this.handleTopScroll)
     this.wrapperRef.removeEventListener("scroll", this.handleBottomScroll)
   }
-  // DONT THINK WE EVER NEED THIS> PROBABLY DELETE
-  // componentWillUpdate() {
-  //   // console.log("Update => this.wrapperRef ", this.wrapperRef)
-  //   if (
-  //     this.wrapperRef &&
-  //     this.wrapperRef.scrollLeft !== this.state.scrollLeftVal
-  //   ) {
-  //     this.setState({
-  //       scrollLeftVal: this.wrapperRef.scrollLeft,
-  //     })
-  //   }
-  // }
 
   setWrapperRef(node) {
-    // console.log("Setting wrapper ref ", node)
     this.wrapperRef = node
   }
 
