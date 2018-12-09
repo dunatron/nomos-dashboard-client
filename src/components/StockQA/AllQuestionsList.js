@@ -53,23 +53,25 @@ class AllQuestionsList extends Component {
       console.group("_updateQuestionInCache")
       console.log("previousResult => ", previousResult)
       console.log("updatedQuestion => ", updatedQuestion)
+      const UPDATED_QUESTION = updatedQuestion.data.updateQuestion
 
-      console.log(
-        "previousResult.questionFeed.questions => ",
-        previousResult.questionFeed.questions
-      )
-      console.log(
-        " updatedQuestion.data.updateQuestion.id => ",
-        updatedQuestion.data.updateQuestion.id
-      )
+      const allQuestions = previousResult.questionFeed.questions
+      const idToSearchBy = updatedQuestion.data.updateQuestion.id
+
+      const foundIndex = allQuestions.findIndex(q => q.id === idToSearchBy)
+      console.log("foundIndex => ", foundIndex)
+
+      allQuestions.splice(foundIndex, 1, UPDATED_QUESTION)
 
       // 1. I think we find the indexOf for the previous result based on the id.
-      const indexFound = previousResult.questionFeed.questions.indexOf(
-        q => q.id === updatedQuestion.data.updateQuestion.id
-      )
-      console.log("indexFound => ", indexFound)
+      // const indexFound = previousResult.questionFeed.questions.indexOf(
+      //   q => q.id === updatedQuestion.data.updateQuestion.id
+      // )
+      // console.log("indexFound => ", indexFound)
       // 2. then we simply slice out and replace the object at that index
+      console.log("Look at all questions now please ", allQuestions)
       console.groupEnd()
+      alert("Question has been updated " + JSON.stringify(UPDATED_QUESTION))
       return Object.assign({}, previousResult, {
         questionFeed: {
           count: previousResult.questionFeed.count,

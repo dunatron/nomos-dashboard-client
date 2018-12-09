@@ -15,5 +15,9 @@ mutation updateQuestion($id: ID!, $data: QuestionUpdateInput!) {
       name
       url
     }
+    tags {
+      id
+      name
+    }
   }
 }
