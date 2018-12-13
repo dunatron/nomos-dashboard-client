@@ -38,6 +38,8 @@ const styles = theme => ({
   modalTitle: {
     margin: 0,
     alignSelf: "center",
+    color: theme.palette.primary.main,
+    fontWeight: 300,
   },
   closeBtn: {},
 
@@ -82,6 +84,7 @@ class Modal extends Component {
           <div className={classes.modalHeader}>
             <h2 className={classes.modalTitle}>{title}</h2>
             <IconButton
+              color={"secondary"}
               aria-label="Delete"
               className={classes.closeBtn}
               onClick={() => close()}>

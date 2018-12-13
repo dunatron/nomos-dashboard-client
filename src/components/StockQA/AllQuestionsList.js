@@ -106,7 +106,6 @@ class AllQuestionsList extends Component {
     // const { id, name, answers, links, notes, tags } = modalDetailsObj
     return (
       <div>
-        <h2>I am the details for a modal</h2>
         <EditableQuestionCard
           question={modalDetailsObj}
           updateQuestion={res => {
