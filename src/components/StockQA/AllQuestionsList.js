@@ -205,8 +205,12 @@ class AllQuestionsList extends Component {
           return (
             <Fragment>
               {modalIsOpen ? (
-                <Modal width={800} height={500} close={() => this.closeModal()}>
-                  <div onClick={() => this.closeModal()}>Close</div>
+                <Modal
+                  title={modalDetailsObj.name}
+                  width={800}
+                  height={500}
+                  close={() => this.closeModal()}>
+                  {/* <div onClick={() => this.closeModal()}>Close</div> */}
                   {this.renderModalDetails(updateQuery)}
                 </Modal>
               ) : null}

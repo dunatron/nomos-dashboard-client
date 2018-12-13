@@ -1,7 +1,11 @@
 import React, { Component } from "react"
+import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/core/styles"
 import { fade } from "@material-ui/core/styles/colorManipulator"
 import ReactDOM from "react-dom"
+import Button from "@material-ui/core/Button"
+import IconButton from "@material-ui/core/IconButton"
+import CloseIcon from "@material-ui/icons/Close"
 const modalRoot = document.getElementById("modal-root")
 
 const styles = theme => ({
@@ -23,6 +27,23 @@ const styles = theme => ({
     zIndex: 9000,
     height: "100%",
     width: "100%",
+  },
+  modalHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    // padding: `0 ${theme.spacing.unit * 2}px`,
+    padding: theme.spacing.unit * 2,
+  },
+  modalTitle: {
+    margin: 0,
+    alignSelf: "center",
+  },
+  closeBtn: {},
+
+  modalBody: {
+    padding: `0 ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px ${theme
+      .spacing.unit * 2}px`,
   },
   overlay: {
     position: "fixed",
@@ -49,7 +70,7 @@ class Modal extends Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, close, title } = this.props
     return ReactDOM.createPortal(
       <div className={classes.root}>
         <div
@@ -58,8 +79,16 @@ class Modal extends Component {
             maxWidth: `${this.props.width}px`,
             maxHeight: `${this.props.height}px`,
           }}>
-          <h1>I am the modal</h1>
-          {this.props.children}
+          <div className={classes.modalHeader}>
+            <h2 className={classes.modalTitle}>{title}</h2>
+            <IconButton
+              aria-label="Delete"
+              className={classes.closeBtn}
+              onClick={() => close()}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </div>
+          <div className={classes.modalBody}>{this.props.children}</div>
         </div>
         <div className={classes.overlay} onClick={() => this.props.close()}>
           Overlay
@@ -68,6 +97,12 @@ class Modal extends Component {
       this.el
     )
   }
+}
+
+Modal.propTypes = {
+  classes: PropTypes.object.isRequired,
+  close: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
 }
 
 export default withStyles(styles)(Modal)
