@@ -2,23 +2,7 @@
 
 This table will accept an array of objects. the columns are set by giving the SuperTable a config.
 
-```
-<SuperTable
-  columnHeaders={this.columnHeaders()}
-  tags={{
-  found: "tags",
-  key: "id",
-  options: allTags
-  	? allTags.map(t => ({ name: t.name, value: t.id }))
-    : [],
-  }}
-  title="Table of Stock questions"
-  data={questions}
-  executeFunc={(funcName, obj) => {
-  this.executeFunctionByName(funcName, obj)
-  }}
-/>
-```
+
 
 ```
 {
