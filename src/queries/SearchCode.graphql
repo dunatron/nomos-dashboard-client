@@ -1,0 +1,15 @@
+query searchCode($search: String!) {
+  codeSearch(search: $search) {
+    id
+    name
+    content
+    tags {
+      name
+    }
+    links {
+      id
+      name
+      url
+    }
+  }
+}

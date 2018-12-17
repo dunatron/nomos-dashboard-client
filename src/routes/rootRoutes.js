@@ -8,6 +8,7 @@ import AllLeavePage from "../pages/AllLeavePage"
 import LeaveCalendarPage from "../pages/LeaveCalendarPage"
 import StockQAPage from "../pages/StockQAPage"
 import LineReportPage from "../pages/LineReportPage"
+import CodeKeeperPage from "../pages/CodeKeeperPage"
 // Icons
 import ArrowBackIcon from "@material-ui/icons/ArrowBackIos"
 import PermContactIcon from "@material-ui/icons/PermContactCalendar"
@@ -98,6 +99,15 @@ const rootRoutes = [
     main: true,
     restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
     component: LineReportPage,
+  },
+  {
+    title: "Code Keeper",
+    path: "/code-keeper",
+    icon: <PermContactIcon color="primary" style={styles.icon} />,
+    panel: true,
+    main: true,
+    restricted: ["DEVELOPER", "PROJECT_MANAGER", "ONBOARDER", "WIZARD"],
+    component: CodeKeeperPage,
   },
 ]
 
