@@ -1,7 +1,7 @@
 {
   "main.css": "/nomos-dashboard-client/static/css/main.e6179902.chunk.css",
-  "main.js": "/nomos-dashboard-client/static/js/main.d2bcf96b.chunk.js",
-  "main.js.map": "/nomos-dashboard-client/static/js/main.d2bcf96b.chunk.js.map",
+  "main.js": "/nomos-dashboard-client/static/js/main.ab15161b.chunk.js",
+  "main.js.map": "/nomos-dashboard-client/static/js/main.ab15161b.chunk.js.map",
   "static/css/1.9ed86e67.chunk.css": "/nomos-dashboard-client/static/css/1.9ed86e67.chunk.css",
   "static/js/1.0dab3ab9.chunk.js": "/nomos-dashboard-client/static/js/1.0dab3ab9.chunk.js",
   "static/js/1.0dab3ab9.chunk.js.map": "/nomos-dashboard-client/static/js/1.0dab3ab9.chunk.js.map",
@@ -10,6 +10,6 @@
   "static/css/1.9ed86e67.chunk.css.map": "/nomos-dashboard-client/static/css/1.9ed86e67.chunk.css.map",
   "static/css/main.e6179902.chunk.css.map": "/nomos-dashboard-client/static/css/main.e6179902.chunk.css.map",
   "index.html": "/nomos-dashboard-client/index.html",
-  "precache-manifest.4b6e160bbfa1f17d182e6846982ada38.js": "/nomos-dashboard-client/precache-manifest.4b6e160bbfa1f17d182e6846982ada38.js",
+  "precache-manifest.88a368ed3c7cfcb51c4db92d858ee51a.js": "/nomos-dashboard-client/precache-manifest.88a368ed3c7cfcb51c4db92d858ee51a.js",
   "service-worker.js": "/nomos-dashboard-client/service-worker.js"
 }
