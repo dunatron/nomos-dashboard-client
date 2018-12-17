@@ -1,15 +1,15 @@
 {
-  "main.css": "/static/css/main.ade966fd.chunk.css",
-  "main.js": "/static/js/main.b85fbaa0.chunk.js",
-  "main.js.map": "/static/js/main.b85fbaa0.chunk.js.map",
-  "static/css/1.acbb6c99.chunk.css": "/static/css/1.acbb6c99.chunk.css",
-  "static/js/1.121f145b.chunk.js": "/static/js/1.121f145b.chunk.js",
-  "static/js/1.121f145b.chunk.js.map": "/static/js/1.121f145b.chunk.js.map",
-  "runtime~main.js": "/static/js/runtime~main.229c360f.js",
-  "runtime~main.js.map": "/static/js/runtime~main.229c360f.js.map",
-  "static/css/1.acbb6c99.chunk.css.map": "/static/css/1.acbb6c99.chunk.css.map",
-  "static/css/main.ade966fd.chunk.css.map": "/static/css/main.ade966fd.chunk.css.map",
-  "index.html": "/index.html",
-  "precache-manifest.7c10dd8dccadeba2990bde2e7f078f41.js": "/precache-manifest.7c10dd8dccadeba2990bde2e7f078f41.js",
-  "service-worker.js": "/service-worker.js"
+  "main.css": "/nomos-dashboard-client/static/css/main.ade966fd.chunk.css",
+  "main.js": "/nomos-dashboard-client/static/js/main.779e2797.chunk.js",
+  "main.js.map": "/nomos-dashboard-client/static/js/main.779e2797.chunk.js.map",
+  "static/css/1.acbb6c99.chunk.css": "/nomos-dashboard-client/static/css/1.acbb6c99.chunk.css",
+  "static/js/1.121f145b.chunk.js": "/nomos-dashboard-client/static/js/1.121f145b.chunk.js",
+  "static/js/1.121f145b.chunk.js.map": "/nomos-dashboard-client/static/js/1.121f145b.chunk.js.map",
+  "runtime~main.js": "/nomos-dashboard-client/static/js/runtime~main.622188a6.js",
+  "runtime~main.js.map": "/nomos-dashboard-client/static/js/runtime~main.622188a6.js.map",
+  "static/css/1.acbb6c99.chunk.css.map": "/nomos-dashboard-client/static/css/1.acbb6c99.chunk.css.map",
+  "static/css/main.ade966fd.chunk.css.map": "/nomos-dashboard-client/static/css/main.ade966fd.chunk.css.map",
+  "index.html": "/nomos-dashboard-client/index.html",
+  "precache-manifest.583c56df0592511682d5bdb8626689c4.js": "/nomos-dashboard-client/precache-manifest.583c56df0592511682d5bdb8626689c4.js",
+  "service-worker.js": "/nomos-dashboard-client/service-worker.js"
 }
