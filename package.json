@@ -1,5 +1,6 @@
 {
   "name": "my-app",
+  "homepage": "https://dunatron.github.io/nomos-dashboard-client/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -39,7 +40,9 @@
     "start": "rm -rf ./node_modules/.cache/babel-loader && react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -51,6 +54,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "gh-pages": "^2.0.1",
     "react-app-rewired": "^1.6.2"
   }
 }
