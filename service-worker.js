@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/nomos-dashboard-client/precache-manifest.583c56df0592511682d5bdb8626689c4.js"
+  "/nomos-dashboard-client/build/precache-manifest.2ac0a6b36ab1f4731a7cccaab426c2c3.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/nomos-dashboard-client/index.html", {
+workbox.routing.registerNavigationRoute("/nomos-dashboard-client/build/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
