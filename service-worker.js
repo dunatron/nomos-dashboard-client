@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/nomos-dashboard-client/precache-manifest.2260b1f981f77bbce2f9b1ae40f17ad2.js"
+  "/nomos-dashboard-client/precache-manifest.d82d8b924fff95460aab69bc5a22ee4a.js"
 );
 
 workbox.clientsClaim();
