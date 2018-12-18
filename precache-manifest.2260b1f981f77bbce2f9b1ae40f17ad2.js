@@ -4,15 +4,15 @@ self.__precacheManifest = [
     "url": "/nomos-dashboard-client/static/js/runtime~main.622188a6.js"
   },
   {
-    "revision": "ab15161ba30abe2268aa",
-    "url": "/nomos-dashboard-client/static/js/main.ab15161b.chunk.js"
+    "revision": "a227f4a07975529abe84",
+    "url": "/nomos-dashboard-client/static/js/main.a227f4a0.chunk.js"
   },
   {
     "revision": "0dab3ab94df0c549e410",
     "url": "/nomos-dashboard-client/static/js/1.0dab3ab9.chunk.js"
   },
   {
-    "revision": "ab15161ba30abe2268aa",
+    "revision": "a227f4a07975529abe84",
     "url": "/nomos-dashboard-client/static/css/main.e6179902.chunk.css"
   },
   {
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/nomos-dashboard-client/static/css/1.9ed86e67.chunk.css"
   },
   {
-    "revision": "d888a5d28f1aadd85dcc94ab4d44f25f",
+    "revision": "8ffb3a6fa06ca7171004514c95550a0e",
     "url": "/nomos-dashboard-client/index.html"
   }
 ];
